@@ -24,7 +24,7 @@ namespace Repository
             try {
                 string query = $" SELECT * FROM Product WHERE ProductID='{id}' ";
                 //_transaction.RunQuery<DataObject.Product>(query);
-                return _transaction._context.Database.SqlQuery<DataObject.Product>(query).First()
+                return _transaction._context.Database.SqlQuery<DataObject.Product>(query).First();
             }
             catch (Exception) {
                 throw;

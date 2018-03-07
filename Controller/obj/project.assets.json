@@ -12638,11 +12638,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\Controller\\Controller.csproj",
+      "projectUniqueName": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\WDT1\\Controller\\Controller.csproj",
       "projectName": "Controller",
-      "projectPath": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\Controller\\Controller.csproj",
+      "projectPath": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\WDT1\\Controller\\Controller.csproj",
       "packagesPath": "C:\\Users\\fswon\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\Controller\\obj\\",
+      "outputPath": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\WDT1\\Controller\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -12661,14 +12661,14 @@
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\User\\BusinessObject.csproj": {
-              "projectPath": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\User\\BusinessObject.csproj"
+            "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\WDT1\\User\\BusinessObject.csproj": {
+              "projectPath": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\WDT1\\User\\BusinessObject.csproj"
             },
-            "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\DataObject\\DataObject.csproj": {
-              "projectPath": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\DataObject\\DataObject.csproj"
+            "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\WDT1\\DataObject\\DataObject.csproj": {
+              "projectPath": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\WDT1\\DataObject\\DataObject.csproj"
             },
-            "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\Repository\\Repository.csproj": {
-              "projectPath": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\Repository\\Repository.csproj"
+            "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\WDT1\\Repository\\Repository.csproj": {
+              "projectPath": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\WDT1\\Repository\\Repository.csproj"
             }
           }
         }

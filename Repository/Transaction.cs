@@ -27,9 +27,9 @@ namespace Repository
         #endregion
 
         #region methods
-        public T RunQuery<T>(string query){
-            return _context.Database.SqlQuery<T>(query).First();
-        }
+        //public T RunQuery<T>(string query){
+        //    return _context.Database.SqlQuery<T>(query).First();
+        //}
         #endregion
     }
 }

@@ -15,7 +15,7 @@ namespace Repository
             try {
                 string query = " SELECT oi.*, p.Nane, s.Name FROM " +
                     " OwnerInventory oi INNER JOIN " +
-                    " Product p ON oi.ProductID = p.ProductID "
+                    " Product p ON oi.ProductID = p.ProductID ";
                 return new List<OwnerInventoryRepository>();
             } catch (Exception e) {
                 throw;

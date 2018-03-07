@@ -21,7 +21,7 @@ namespace Controller
         #endregion
 
         #region ctor
-        public User(Transaction trn):base(trn:trn) {}
+        public User(Transaction trn) {}
         #endregion
 
         #region methods

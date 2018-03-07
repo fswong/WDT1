@@ -673,11 +673,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\DataObject\\DataObject.csproj",
+      "projectUniqueName": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\WDT1\\DataObject\\DataObject.csproj",
       "projectName": "DataObject",
-      "projectPath": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\DataObject\\DataObject.csproj",
+      "projectPath": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\WDT1\\DataObject\\DataObject.csproj",
       "packagesPath": "C:\\Users\\fswon\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\DataObject\\obj\\",
+      "outputPath": "C:\\Users\\fswon\\Google Drive\\MyProjects\\ASP.NETProjects\\WDT\\Assignment1\\Assignment1\\WDT1\\DataObject\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
