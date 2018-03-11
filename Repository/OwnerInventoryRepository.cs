@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Repository
@@ -7,23 +9,68 @@ namespace Repository
     public class OwnerInventoryRepository : Repository
     {
         #region ctor
-        public OwnerInventoryRepository(Transaction trn) : base (trn:trn){}
+        public OwnerInventoryRepository(UnitOfWork uow) : base(uow: uow) { }
         #endregion
 
         #region get
-        public List<OwnerInventoryRepository> GetByStoreId(long id) {
+        /// <summary>
+        /// list all 
+        /// </summary>
+        /// <returns></returns>
+        public List<DataObject.OwnerInventory> ListOwnerInventory() {
             try {
-                string query = " SELECT oi.*, p.Nane, s.Name FROM " +
+                string query = " SELECT oi.*, p.Name, s.Name FROM " +
                     " OwnerInventory oi INNER JOIN " +
                     " Product p ON oi.ProductID = p.ProductID ";
-                return new List<OwnerInventoryRepository>();
-            } catch (Exception e) {
+                return _context.OwnerInventorySet.FromSql(query).ToList();
+            } catch (Exception) {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// get by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="allowedNotFound"></param>
+        /// <returns></returns>
+        public DataObject.OwnerInventory GetOwnerInventoryById(long id, bool allowedNotFound = false) {
+            try {
+                string query = $" SELECT * FROM OwnerInventory oi WHERE ProductID = '{id}' ";
+                if (allowedNotFound)
+                {
+                    return _context.OwnerInventorySet.FromSql(query).FirstOrDefault();
+                }
+                else {
+                    return _context.OwnerInventorySet.FromSql(query).First();
+                }
+            }
+            catch (Exception) {
                 throw;
             }
         }
         #endregion
 
         #region patch
+        /// <summary>
+        /// if the item <20 quantity, set it to 20
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public DataObject.OwnerInventory SetOwnerInventory(long id){
+            try {
+                //check with the database that it is less than 20
+                var product = GetOwnerInventoryById(id);
+                if (product.StockLevel < 20)
+                {
+                    string query = $" UPDATE OwnerInventory SET StockLevel = '20' WHERE ProductId = '{id}' ";
+                    //Execute SQL
+                }
+                return product;
+            } catch (Exception) {
+                throw;
+            }
+        }
         #endregion
     }
 }

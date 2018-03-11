@@ -11,18 +11,18 @@ namespace BusinessObject
         public DataObject.Store _poco { get; protected set; }
 
         private StoreRepository _repository;
-        private List<DataObject.Product> _inventory;
-        private List<DataObject.Product> _notInventory;
+        private List<DataObject.StoreInventory> _inventory;
+        private List<DataObject.StoreInventory> _notInventory;
         #endregion
 
         #region ctor
         /// <summary>
         /// Constructor, returns the poco and products available in store
         /// </summary>
-        /// <param name="trn"></param>
+        /// <param name="uow"></param>
         /// <param name="id"></param>
-        public Store(Transaction trn, long id) : base(trn: trn) {
-            _repository = new StoreRepository(trn);
+        public Store(UnitOfWork uow, long id) : base(uow: uow) {
+            _repository = new StoreRepository(uow);
             _poco = _repository.GetStoreById(id);
             _inventory = GetInventoryProducts(true);
             _notInventory = GetInventoryProducts(false);
@@ -30,9 +30,9 @@ namespace BusinessObject
         #endregion
 
         #region methods
-        public List<DataObject.Product> GetInventoryProducts(bool inInventory = true) {
+        public List<DataObject.StoreInventory> GetInventoryProducts(bool inInventory = true) {
             try {
-                return new List<DataObject.Product>();
+                return new List<DataObject.StoreInventory>();
             }
             catch (Exception e) {
                 throw;

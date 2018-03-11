@@ -7,16 +7,16 @@ namespace BusinessObject
     {
         #region properties
         //one single database transaction
-        private Repository.Transaction _transaction;
+        private Repository.UnitOfWork _context;
         #endregion
 
         #region ctor
         /// <summary>
         /// Generic constructor
         /// </summary>
-        /// <param name="trn"></param>
-        public BusinessObject(Transaction trn) {
-            _transaction = trn;
+        /// <param name="uow"></param>
+        public BusinessObject(UnitOfWork uow) {
+            _context = uow;
         }
         #endregion
     }

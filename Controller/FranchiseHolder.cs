@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 using Repository;
+using Common.Interface;
 
 namespace Controller
 {
-    public class FranchiseHolder : User
+    public class FranchiseHolder : User, IStorefront
     {
         #region properties
+        public BusinessObject.Store _store { get; set; }
         #endregion
 
         #region ctor
-        public FranchiseHolder(Transaction trn) : base(trn:trn){
-            _userType = UserType.FranchiseHolder;
+        public FranchiseHolder() : base(){
         }
         #endregion
 
@@ -61,6 +62,22 @@ namespace Controller
             {
                 throw;
             }
+        }
+
+        /// <summary>
+        /// the root franchise holder view
+        /// </summary>
+        public override void DisplayUserMenu()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// lists the available stores
+        /// </summary>
+        public void DisplayStoreList()
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

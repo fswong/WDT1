@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace Repository
         #endregion
 
         #region ctor
-        public ProductRepository(Transaction trn) : base(trn:trn) { }
+        public ProductRepository(UnitOfWork uow) : base(uow:uow) { }
         #endregion
 
         #region get
@@ -20,16 +21,19 @@ namespace Repository
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public DataObject.Product GetProductById(long id) {
+        public DataObject.Product GetProductById(long id, bool allowedNotfound = false) {
             try {
                 string query = $" SELECT * FROM Product WHERE ProductID='{id}' ";
-                //_transaction.RunQuery<DataObject.Product>(query);
-                return _transaction._context.Database.SqlQuery<DataObject.Product>(query).First();
+                if (allowedNotfound) {
+                    return _context.ProductSet.FromSql(query).FirstOrDefault();
+                }
+                else {
+                    return _context.ProductSet.FromSql(query).First();
+                }
             }
             catch (Exception) {
                 throw;
             }
-            //return new DataObject.Product();
         }
 
         /// <summary>
@@ -49,7 +53,7 @@ namespace Repository
                     query += " NOT IN ";
                 }
                 query += $" (SELECT DISTINCT ProductId FROM Inventory WHERE StoreId = '{storeId}') ";
-                return new List<DataObject.Product>();
+                return _context.ProductSet.FromSql(query).ToList();
             }
             catch (Exception)
             {

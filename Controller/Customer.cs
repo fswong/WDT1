@@ -8,13 +8,19 @@ namespace Controller
     public class Customer : User
     {
         #region properties
-
+        public BusinessObject.Store store { get; set; }
         #endregion
 
         #region ctor
-        public Customer(Transaction trn):base(trn:trn) {
-            _userType = UserType.Customer;
+        /// <summary>
+        /// generic constructor
+        /// </summary>
+        public Customer():base() {
         }
+        #endregion
+
+        #region method
+
         #endregion
     }
 }

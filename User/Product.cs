@@ -16,10 +16,10 @@ namespace BusinessObject
         /// <summary>
         /// Product constructor, returns poco of product data object
         /// </summary>
-        /// <param name="trn"></param>
+        /// <param name="uow"></param>
         /// <param name="id"></param>
-        public Product(Transaction trn, long id):base(trn:trn) {
-            _repository = new ProductRepository(trn);
+        public Product(UnitOfWork uow, long id):base(uow:uow) {
+            _repository = new ProductRepository(uow);
             _poco = _repository.GetProductById(id);
         }
         #endregion

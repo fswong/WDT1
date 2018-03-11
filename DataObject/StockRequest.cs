@@ -16,5 +16,9 @@ namespace DataObject
 
         //expanded from store
         public string StoreName { get; set; }
+
+        //expanded from owner inventory
+        public long CurrentStock { get; set; }
+        public bool StockAvailability { get; set; }
     }
 }

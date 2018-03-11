@@ -7,7 +7,7 @@ namespace Repository
     public class StoreRepository : Repository
     {
         #region ctor
-        public StoreRepository(Transaction trn) : base(trn:trn) {}
+        public StoreRepository(UnitOfWork uow) : base(uow:uow) {}
         #endregion
 
         #region get

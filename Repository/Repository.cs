@@ -7,16 +7,16 @@ namespace Repository
     public abstract class Repository
     {
         #region properties
-        protected Transaction _transaction;
+        protected UnitOfWork _context;
         #endregion
 
         #region ctor
         /// <summary>
         /// Generic constructor
         /// </summary>
-        /// <param name="trn"></param>
-        public Repository(Transaction trn) {
-            _transaction = trn;
+        /// <param name="uow"></param>
+        public Repository(UnitOfWork uow) {
+            _context = uow;
         }
         #endregion
     }
