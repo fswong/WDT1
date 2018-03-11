@@ -7,7 +7,7 @@ namespace BusinessObject
     {
         #region properties
         //one single database transaction
-        private Repository.UnitOfWork _context;
+        protected Repository.UnitOfWork _context;
         #endregion
 
         #region ctor

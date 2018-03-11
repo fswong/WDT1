@@ -61,18 +61,7 @@ namespace Repository
             }
         }
 
-        public List<DataObject.Product> GetOwnerInventory()
-        {
-            try
-            {
-                string query = " SELECT * FROM Product WHERE ";
-                return new List<DataObject.Product>();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        
         #endregion
 
         #region patch

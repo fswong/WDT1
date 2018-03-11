@@ -16,6 +16,8 @@ namespace Controller
         private const int col5 = 4;
         private const int col6 = 4;
 
+        private const int _MAXSTOCK = 20;
+
         public List<DataObject.StockRequest> _stockRequests { get; protected set; }
         public List<DataObject.OwnerInventory> _ownerInventory { get; protected set; }
         #endregion
@@ -117,10 +119,24 @@ namespace Controller
         {
             try
             {
-                foreach (var obj in _ownerInventory) {
-                    string outputRow = "";
+                //generate header
+                Console.WriteLine("Owner Inventory");
+                Console.WriteLine(" ");
+
+                string header = "ID Product Current Stock";
+                Console.WriteLine(header);
+
+                //generate details
+                foreach (var item in _ownerInventory) {
+                    string outputRow =
+                        item.ProductID.ToString().PadRight(col1, ' ') +
+                        item.Name.PadRight(col2, ' ') +
+                        item.StockLevel.ToString().PadRight(col3, ' ');
                     Console.WriteLine(outputRow);
                 }
+
+                Console.WriteLine(" ");
+                Console.WriteLine("Enter product ID to reset:");
             }
             catch (Exception e)
             {
@@ -128,16 +144,70 @@ namespace Controller
             }
         }
 
+        /// <summary>
+        /// if item has 
+        /// </summary>
         public void ResetInventoryItemStock()
         {
             try
             {
+                //generate header
+                Console.WriteLine("Reset Stock");
+                Console.WriteLine("Product stock will be reset to " + _MAXSTOCK);
+                Console.WriteLine(" ");
 
+                //generate details
+                foreach (var item in _ownerInventory)
+                {
+                    string outputRow =
+                        item.ProductID.ToString().PadRight(col1, ' ') +
+                        item.Name.PadRight(col2, ' ') +
+                        item.StockLevel.ToString().PadRight(col3, ' ');
+                    Console.WriteLine(outputRow);
+                }
+
+                Console.WriteLine(" ");
+                Console.WriteLine("Enter product ID to reset:");
+
+                var input =Console.ReadLine();
+
+                var product = _ownerInventory.Find(item => item.ProductID.ToString() == input);
+
+                if (product.StockLevel < _MAXSTOCK)
+                {
+                    product = new OwnerInventoryRepository(_context).SetOwnerInventory(product.ProductID, _MAXSTOCK);
+                    Console.WriteLine(product.ProductID + " stocklevel has been reset to " + _MAXSTOCK);
+                }
+                else {
+                    Console.WriteLine(product.ProductID + " already has enough stock");
+                }
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 throw;
             }
+        }
+
+        public void FulfillStockRequest(DataObject.StockRequest StockRequest) {
+            try {
+                var product = new OwnerInventoryRepository(_context).GetOwnerInventoryById(StockRequest.ProductID);
+
+                if (product.StockLevel > StockRequest.Quantity && StockRequest.StockAvailability) {
+                    //reduce the owner stock
+
+                    //add store stock
+
+                    //delete stock request
+
+
+                }
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.Message);
+                throw;
+            }
+
         }
         #endregion
     }

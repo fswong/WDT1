@@ -14,6 +14,9 @@ namespace Controller
         #endregion
 
         #region ctor
+        /// <summary>
+        /// basic constructor
+        /// </summary>
         public Driver() {
             _state = State.open;
             Begin();
@@ -59,7 +62,7 @@ namespace Controller
         public void CloseApplication() {
             _state = State.closed;
         }
-        #region
+        #endregion
         
     }
 }

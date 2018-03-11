@@ -57,16 +57,10 @@ namespace Repository
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public DataObject.OwnerInventory SetOwnerInventory(long id){
+        public DataObject.OwnerInventory SetOwnerInventory(long ProductID, long Quantity){
             try {
-                //check with the database that it is less than 20
-                var product = GetOwnerInventoryById(id);
-                if (product.StockLevel < 20)
-                {
-                    string query = $" UPDATE OwnerInventory SET StockLevel = '20' WHERE ProductId = '{id}' ";
-                    //Execute SQL
-                }
-                return product;
+                string query = $" UPDATE OwnerInventory SET StockLevel = '{Quantity}' WHERE ProductId = '{ProductID}' ";
+                return GetOwnerInventoryById(ProductID);
             } catch (Exception) {
                 throw;
             }

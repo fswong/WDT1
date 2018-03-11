@@ -32,7 +32,7 @@ namespace BusinessObject
         #region methods
         public List<DataObject.StoreInventory> GetInventoryProducts(bool inInventory = true) {
             try {
-                return new List<DataObject.StoreInventory>();
+                return new StoreInventoryRepository(_context).GetStoreInventoryByStoreId(_poco.StoreID, inInventory);
             }
             catch (Exception e) {
                 throw;
