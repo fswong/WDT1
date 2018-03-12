@@ -55,11 +55,16 @@ namespace Controller
         {
             try
             {
+                // check that the item is not in the list
 
+                // add to list
+
+                // delete from other list
                 return DisplayInventory();
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 throw;
             }
         }

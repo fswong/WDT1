@@ -53,13 +53,15 @@ namespace Repository
 
         #region patch
         /// <summary>
-        /// if the item <20 quantity, set it to 20
+        /// update quantity for a product
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public DataObject.OwnerInventory SetOwnerInventory(long ProductID, long Quantity){
+        public DataObject.OwnerInventory UpdateOwnerInventory(long ProductID, long Quantity){
             try {
                 string query = $" UPDATE OwnerInventory SET StockLevel = '{Quantity}' WHERE ProductId = '{ProductID}' ";
+                // TODO runquery
+
                 return GetOwnerInventoryById(ProductID);
             } catch (Exception) {
                 throw;

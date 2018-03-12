@@ -175,7 +175,7 @@ namespace Controller
 
                 if (product.StockLevel < _MAXSTOCK)
                 {
-                    product = new OwnerInventoryRepository(_context).SetOwnerInventory(product.ProductID, _MAXSTOCK);
+                    product = new OwnerInventoryRepository(_context).UpdateOwnerInventory(product.ProductID, _MAXSTOCK);
                     Console.WriteLine(product.ProductID + " stocklevel has been reset to " + _MAXSTOCK);
                 }
                 else {

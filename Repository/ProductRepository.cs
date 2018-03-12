@@ -65,9 +65,7 @@ namespace Repository
         #endregion
 
         #region patch
-        public void ResetInventoryItemStock(long id) {
 
-        }
         #endregion
     }
 }
