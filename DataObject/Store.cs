@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace DataObject
 {
     public class Store
     {
-        public long StoreID { get; set; }
+        [Key]
+        public int StoreID { get; set; }
         public string Name { get; set; }
     }
 }

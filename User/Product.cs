@@ -18,9 +18,9 @@ namespace BusinessObject
         /// </summary>
         /// <param name="uow"></param>
         /// <param name="id"></param>
-        public Product(UnitOfWork uow, long id):base(uow:uow) {
+        public Product(UnitOfWork uow, int ProductID):base(uow:uow) {
             _repository = new ProductRepository(uow);
-            _poco = _repository.GetProductById(id);
+            _poco = _repository.GetProductById(ProductID);
         }
         #endregion
 
@@ -29,7 +29,7 @@ namespace BusinessObject
         /// if the product has quantity less than 20, set it to 20
         /// </summary>
         /// <param name="id"></param>
-        public void ResetInventoryItemStock(long id, long storeId) {
+        public void ResetInventoryItemStock(int StoreID, int ProductID) {
 
         }
 

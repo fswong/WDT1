@@ -19,7 +19,7 @@ namespace Repository
         /// <returns></returns>
         public List<DataObject.OwnerInventory> ListOwnerInventory() {
             try {
-                string query = " SELECT oi.*, p.Name, s.Name FROM " +
+                string query = " SELECT oi.*, p.Name FROM " +
                     " OwnerInventory oi INNER JOIN " +
                     " Product p ON oi.ProductID = p.ProductID ";
                 return _context.OwnerInventorySet.FromSql(query).ToList();
@@ -34,9 +34,11 @@ namespace Repository
         /// <param name="id"></param>
         /// <param name="allowedNotFound"></param>
         /// <returns></returns>
-        public DataObject.OwnerInventory GetOwnerInventoryById(long id, bool allowedNotFound = false) {
+        public DataObject.OwnerInventory GetOwnerInventoryById(int id, bool allowedNotFound = false) {
             try {
-                string query = $" SELECT * FROM OwnerInventory oi WHERE ProductID = '{id}' ";
+                string query = $" SELECT oi.*,p.Name FROM OwnerInventory oi " +
+                    " INNER JOIN Product p ON oi.ProductID = p.ProductID " +
+                    $" WHERE oi.ProductID = '{id}' ";
                 if (allowedNotFound)
                 {
                     return _context.OwnerInventorySet.FromSql(query).FirstOrDefault();
@@ -57,10 +59,11 @@ namespace Repository
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public DataObject.OwnerInventory UpdateOwnerInventory(long ProductID, long Quantity){
+        public DataObject.OwnerInventory UpdateOwnerInventory(int ProductID, long Quantity){
             try {
                 string query = $" UPDATE OwnerInventory SET StockLevel = '{Quantity}' WHERE ProductId = '{ProductID}' ";
-                // TODO runquery
+                _context.Database.ExecuteSqlCommand(query);
+                _context.SaveChanges();
 
                 return GetOwnerInventoryById(ProductID);
             } catch (Exception) {

@@ -19,7 +19,7 @@ namespace Repository
         /// <param name="StoreID"></param>
         /// <param name="inInventory"></param>
         /// <returns></returns>
-        public List<DataObject.StoreInventory> GetStoreInventoryByStoreId(long StoreID, bool inInventory) {
+        public List<DataObject.StoreInventory> GetStoreInventoryByStoreId(int StoreID, bool inInventory) {
             try
             {
                 // TODO fix query
@@ -39,7 +39,7 @@ namespace Repository
         /// <param name="ProductID"></param>
         /// <param name="allowedNotFound"></param>
         /// <returns></returns>
-        public DataObject.StoreInventory GetStoreInventoryByStoreIdAndProductId(long StoreID, long ProductID, bool allowedNotFound = false) {
+        public DataObject.StoreInventory GetStoreInventoryByStoreIdAndProductId(int StoreID, int ProductID, bool allowedNotFound = false) {
             try
             {
                 // TODO fix query
@@ -65,16 +65,15 @@ namespace Repository
         /// <param name="StoreID"></param>
         /// <param name="ProductID"></param>
         /// <returns></returns>
-        public DataObject.StoreInventory CreateStoreInventory(long StoreID, long ProductID) {
+        public DataObject.StoreInventory CreateStoreInventory(int StoreID, int ProductID) {
             try {
                 string query = " INSERT INTO StoreInventory " +
                     " (StoreID,ProductID,StockLevel) VALUES " +
                     $" ({StoreID},{ProductID},'1') ";
-                // TODO runquery
+                _context.Database.ExecuteSqlCommand(query);
 
                 return GetStoreInventoryByStoreIdAndProductId(StoreID, ProductID); ;
-            } catch (Exception e) {
-                Console.WriteLine(e.Message);
+            } catch (Exception) {
                 throw;
             }
         }
@@ -85,14 +84,15 @@ namespace Repository
         /// Update the quantity 
         /// </summary>
         /// <param name="ProductID"></param>
+        /// <param name="StoreID"></param>
         /// <param name="Quantity"></param>
         /// <returns></returns>
-        public DataObject.StoreInventory UpdateStoreInventory(long ProductID, long StoreID, long Quantity) {
+        public DataObject.StoreInventory UpdateStoreInventory(int ProductID, int StoreID, long Quantity) {
             try {
                 string query = $" UPDATE StoreInventory SET StockLevel = '{Quantity}' WHERE ProductID = '{ProductID}' AND StoreID = '{StoreID}'; ";
-                // TODO runquery
+                _context.Database.ExecuteSqlCommand(query);
 
-                return new DataObject.StoreInventory();
+                return GetStoreInventoryByStoreIdAndProductId(StoreID, ProductID); ;
             }
             catch (Exception) {
                 throw;

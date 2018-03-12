@@ -51,7 +51,7 @@ namespace Controller
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public List<DataObject.Product> AddNewInventoryItem(long id)
+        public List<DataObject.Product> AddNewInventoryItem(int id)
         {
             try
             {

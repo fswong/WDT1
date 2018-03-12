@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace DataObject
 {
     public class StockRequest
     {
-        public long StockRequestID { get; set; }
-        public long StoreID { get; set; }
-        public long ProductID { get; set; }
-        public long Quantity { get; set; }
+        [Key]
+        public int StockRequestID { get; set; }
+        public int StoreID { get; set; }
+        public int ProductID { get; set; }
+        public int Quantity { get; set; }
 
         //expanded from product
         public string ProductName { get; set; }
@@ -18,7 +20,7 @@ namespace DataObject
         public string StoreName { get; set; }
 
         //expanded from owner inventory
-        public long CurrentStock { get; set; }
+        public int CurrentStock { get; set; }
         public bool StockAvailability { get; set; }
     }
 }

@@ -16,8 +16,9 @@ namespace Repository
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public DataObject.Store GetStoreById(long id) {
+        public DataObject.Store GetStoreById(int StoreID) {
             try {
+                string query = $" SELECT * FROM STORE WHERE StoreID = '{StoreID}' ";
                 return new DataObject.Store();
             } catch (Exception e){
                 throw;

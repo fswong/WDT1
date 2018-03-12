@@ -19,14 +19,20 @@ namespace Repository
         /// <returns></returns>
         public List<DataObject.StockRequest> ListStockRequests() {
             try {
-                string query = " SELECT * FROM StockRequest ";
+                string query = " SELECT sr.*, s.Name AS StoreName, p.Name AS ProductName, oi.StockLevel AS CurrentStock, " +
+                    " CAST(CASE WHEN sr.Quantity >= StockLevel THEN 1 ELSE 0 END AS BIT) AS StockAvailability " +
+                    " FROM StockRequest sr " + 
+                    " INNER JOIN Store s ON sr.StoreID = s.StoreID " +
+                    " INNER JOIN Product p ON sr.ProductID = p.ProductID " +
+                    " INNER JOIN OwnerInventory oi ON sr.ProductID = oi.ProductID ";
+                //.WriteLine(query);
                 return _context.StockRequestSet.FromSql(query).ToList();
             } catch (Exception) {
                 throw;
             }
         }
 
-        public DataObject.StockRequest GetStockRequestById(long StockRequestID, bool allowNotFound = false) {
+        public DataObject.StockRequest GetStockRequestById(int StockRequestID, bool allowNotFound = false) {
             try {
                 // TODO fix query
                 string query = $" SELECT * FROM StockRequest WHERE StockRequestID = '{StockRequestID}' ";
@@ -47,7 +53,7 @@ namespace Repository
         /// 
         /// </summary>
         /// <param name="StockRequestID"></param>
-        public void DeleteStockRequest(long StockRequestID)
+        public void DeleteStockRequest(int StockRequestID)
         {
             try
             {

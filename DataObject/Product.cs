@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataObject
 {
     public class Product
     {
-        public long ProductID { get; set; }
+        [Key]
+        public int ProductID { get; set; }
         public string Name { get; set; }
     }
 }

@@ -21,7 +21,7 @@ namespace Repository
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public DataObject.Product GetProductById(long id, bool allowedNotfound = false) {
+        public DataObject.Product GetProductById(int id, bool allowedNotfound = false) {
             try {
                 string query = $" SELECT * FROM Product WHERE ProductID='{id}' ";
                 if (allowedNotfound) {
@@ -42,7 +42,7 @@ namespace Repository
         /// <param name="storeId"></param>
         /// <param name="inInventory"></param>
         /// <returns></returns>
-        public List<DataObject.Product> GetInventoryProduct(long storeId, bool inInventory) {
+        public List<DataObject.Product> GetInventoryProduct(int storeId, bool inInventory) {
             try
             {
                 string query = " SELECT * FROM Product WHERE Id ";

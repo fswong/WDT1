@@ -27,14 +27,18 @@ namespace Controller
         public Owner(UnitOfWork uow) : base(uow:uow) {
             // get the stock requests
             _stockRequests = new StockRequestRepository(_context).ListStockRequests();
+
             // get the owner inventory
             _ownerInventory = new OwnerInventoryRepository(_context).ListOwnerInventory();
+
+            // begin transaction
+            Action();
         }
         #endregion
 
         #region methods
         /// <summary>
-        /// user's 
+        /// user's main view
         /// </summary>
         public override void DisplayUserMenu() {
             Console.WriteLine("Welcome to Marvelous Magic (Owner)");
@@ -44,7 +48,7 @@ namespace Controller
             Console.WriteLine("3. Reset Inventory Item Stock");
             Console.WriteLine("4. Return to Main Menu");
             Console.WriteLine(" ");
-            Console.WriteLine("Enter an option:");
+            Console.Write("Enter an option:");
 
             try {
                 var response = Console.ReadLine();
@@ -64,13 +68,13 @@ namespace Controller
                         break;
                     default:
                         Console.WriteLine("Invalid Input");
-                        DisplayUserMenu();
+                        //DisplayUserMenu();
                         break;
 
                 }
             } catch (Exception e) {
                 Console.WriteLine(e);
-                DisplayUserMenu();
+                //DisplayUserMenu();
             }
         }
 
@@ -99,12 +103,12 @@ namespace Controller
                 foreach (var item in result)
                 {
                     string outputRow =
-                    item.StockRequestID.ToString().PadRight(col1,' ') +
-                    item.StoreName.PadRight(col2, ' ') +
-                    item.ProductName.PadRight(col3, ' ') +
-                    item.Quantity.ToString().PadRight(col4, ' ') +
-                    item.CurrentStock.ToString().PadRight(col5, ' ') +
-                    item.StockAvailability.ToString().PadRight(col6, ' ');
+                    item.StockRequestID.ToString().PadRight((int)Padding.id,' ') +
+                    item.StoreName.PadRight((int)Padding.name, ' ') +
+                    item.ProductName.PadRight((int)Padding.name, ' ') +
+                    item.Quantity.ToString().PadRight((int)Padding.quantity, ' ') +
+                    item.CurrentStock.ToString().PadRight((int)Padding.quantity, ' ') +
+                    item.StockAvailability.ToString().PadRight((int)Padding.boolean, ' ');
                     Console.WriteLine(outputRow);
                 }
 
@@ -114,7 +118,7 @@ namespace Controller
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                DisplayUserMenu();
+                //DisplayUserMenu();
             }
         }
 
@@ -133,12 +137,12 @@ namespace Controller
 
                 Console.WriteLine(" ");
 
-                DisplayUserMenu();
+                //DisplayUserMenu();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                DisplayUserMenu();
+                //DisplayUserMenu();
             }
         }
 
@@ -175,7 +179,7 @@ namespace Controller
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                DisplayUserMenu();
+                //DisplayUserMenu();
             }
         }
 
@@ -185,21 +189,36 @@ namespace Controller
         /// <param name="StockRequest"></param>
         public void FulfillStockRequest(DataObject.StockRequest StockRequest) {
             try {
-                var product = new OwnerInventoryRepository(_context).GetOwnerInventoryById(StockRequest.ProductID);
+                var product = _ownerInventory.Find(item => item.ProductID == StockRequest.ProductID);
 
-                if (product.StockLevel > StockRequest.Quantity && StockRequest.StockAvailability) {
-                    //reduce the owner stock
+                if (product != null)
+                {
+                    // validate
+                    if (product.StockLevel > StockRequest.Quantity && StockRequest.StockAvailability)
+                    {
+                        //reduce the owner stock
+                        product.StockLevel = product.StockLevel - StockRequest.Quantity;
+                        product = new OwnerInventoryRepository(_context).UpdateOwnerInventory(product.ProductID, product.StockLevel);
 
-                    //add store stock
+                        //add store stock
+                        var siRepo = new StoreInventoryRepository(_context);
+                        var storeInventory = siRepo.GetStoreInventoryByStoreIdAndProductId(StockRequest.StoreID, product.ProductID);
+                        storeInventory.StockLevel = storeInventory.StockLevel + StockRequest.Quantity;
+                        siRepo.UpdateStoreInventory(product.ProductID, StockRequest.StoreID, storeInventory.StockLevel);
 
-                    //delete stock request
-
-
+                        //delete stock request
+                        new StockRequestRepository(_context).DeleteStockRequest(StockRequest.StockRequestID);
+                    }
                 }
+                else {
+                    Console.WriteLine("Invalid product chosen");
+                }
+
+                //DisplayUserMenu();
             }
             catch (Exception e) {
                 Console.WriteLine(e.Message);
-                DisplayUserMenu();
+                //DisplayUserMenu();
             }
 
         }
@@ -219,15 +238,15 @@ namespace Controller
                 foreach (var item in _ownerInventory)
                 {
                     string outputRow =
-                        item.ProductID.ToString().PadRight(col1, ' ') +
-                        item.Name.PadRight(col2, ' ') +
-                        item.StockLevel.ToString().PadRight(col3, ' ');
+                        item.ProductID.ToString().PadRight((int)Padding.id, ' ') +
+                        item.Name.PadRight((int)Padding.name, ' ') +
+                        item.StockLevel.ToString().PadRight((int)Padding.quantity, ' ');
                     Console.WriteLine(outputRow);
                 }
             }
             catch (Exception e) {
                 Console.WriteLine(e.Message);
-                DisplayUserMenu();
+                //DisplayUserMenu();
             }
             
         }

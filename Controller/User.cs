@@ -28,27 +28,27 @@ namespace Controller
             this._state = State.closed;
         }
 
+        /// <summary>
+        /// individual user's main menu
+        /// </summary>
         public abstract void DisplayUserMenu();
 
         /// <summary>
-        /// User generic main menu
+        /// begin user transaction
         /// </summary>
         public void Action() {
-            using (var uow = new UnitOfWork()) {
-                _context = uow;
-                do
+            do
+            {
+                try
                 {
-                    try
-                    {
-                        DisplayUserMenu();
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                        DisplayUserMenu();
-                    }
-                } while (_state != State.closed);
-            }
+                    DisplayUserMenu();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    DisplayUserMenu();
+                }
+            } while (_state != State.closed);
         }
         #endregion
 
@@ -66,6 +66,8 @@ namespace Controller
             Console.WriteLine("2. Franchise Holder");
             Console.WriteLine("3. Customer");
             Console.WriteLine("4. Quit");
+            Console.WriteLine(" ");
+            Console.Write("Enter an option:");
             User user = null;
             try
             {
@@ -105,8 +107,7 @@ namespace Controller
                 //displose of object
                 if (user != null)
                 {
-                    ((IDisposable)user).Dispose();
-                    //user = null;
+                    user = null;
                 }
             }
         }
