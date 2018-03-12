@@ -9,6 +9,7 @@ namespace Controller
     public class Owner : User 
     {
         #region properties
+        // TODO change this to column type
         private const int col1 = 4;
         private const int col2 = 4;
         private const int col3 = 4;
@@ -32,8 +33,10 @@ namespace Controller
         #endregion
 
         #region methods
-        override
-        public void DisplayUserMenu() {
+        /// <summary>
+        /// user's 
+        /// </summary>
+        public override void DisplayUserMenu() {
             Console.WriteLine("Welcome to Marvelous Magic (Owner)");
             Console.WriteLine("==========================");
             Console.WriteLine("1. Display All Stock Requests");
@@ -111,10 +114,13 @@ namespace Controller
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                //throw;
+                DisplayUserMenu();
             }
         }
 
+        /// <summary>
+        /// lists owner inventory
+        /// </summary>
         public void DisplayOwnerInventory()
         {
             try
@@ -123,29 +129,21 @@ namespace Controller
                 Console.WriteLine("Owner Inventory");
                 Console.WriteLine(" ");
 
-                string header = "ID Product Current Stock";
-                Console.WriteLine(header);
-
-                //generate details
-                foreach (var item in _ownerInventory) {
-                    string outputRow =
-                        item.ProductID.ToString().PadRight(col1, ' ') +
-                        item.Name.PadRight(col2, ' ') +
-                        item.StockLevel.ToString().PadRight(col3, ' ');
-                    Console.WriteLine(outputRow);
-                }
+                DisplayOwnerInventoryView();
 
                 Console.WriteLine(" ");
-                Console.WriteLine("Enter product ID to reset:");
+
+                DisplayUserMenu();
             }
             catch (Exception e)
             {
-                throw;
+                Console.WriteLine(e.Message);
+                DisplayUserMenu();
             }
         }
 
         /// <summary>
-        /// if item has 
+        /// if item has less than 20 stock display
         /// </summary>
         public void ResetInventoryItemStock()
         {
@@ -156,15 +154,7 @@ namespace Controller
                 Console.WriteLine("Product stock will be reset to " + _MAXSTOCK);
                 Console.WriteLine(" ");
 
-                //generate details
-                foreach (var item in _ownerInventory)
-                {
-                    string outputRow =
-                        item.ProductID.ToString().PadRight(col1, ' ') +
-                        item.Name.PadRight(col2, ' ') +
-                        item.StockLevel.ToString().PadRight(col3, ' ');
-                    Console.WriteLine(outputRow);
-                }
+                DisplayOwnerInventoryView();
 
                 Console.WriteLine(" ");
                 Console.WriteLine("Enter product ID to reset:");
@@ -185,10 +175,14 @@ namespace Controller
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                throw;
+                DisplayUserMenu();
             }
         }
 
+        /// <summary>
+        /// Completes a stockrequest
+        /// </summary>
+        /// <param name="StockRequest"></param>
         public void FulfillStockRequest(DataObject.StockRequest StockRequest) {
             try {
                 var product = new OwnerInventoryRepository(_context).GetOwnerInventoryById(StockRequest.ProductID);
@@ -205,9 +199,37 @@ namespace Controller
             }
             catch (Exception e) {
                 Console.WriteLine(e.Message);
-                throw;
+                DisplayUserMenu();
             }
 
+        }
+        #endregion
+
+        #region view
+        /// <summary>
+        /// owner inventory view
+        /// </summary>
+        public void DisplayOwnerInventoryView() {
+            try {
+                //generic header
+                string header = "ID Product Current Stock";
+                Console.WriteLine(header);
+
+                //generate details
+                foreach (var item in _ownerInventory)
+                {
+                    string outputRow =
+                        item.ProductID.ToString().PadRight(col1, ' ') +
+                        item.Name.PadRight(col2, ' ') +
+                        item.StockLevel.ToString().PadRight(col3, ' ');
+                    Console.WriteLine(outputRow);
+                }
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.Message);
+                DisplayUserMenu();
+            }
+            
         }
         #endregion
     }
