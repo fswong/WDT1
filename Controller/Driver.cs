@@ -1,4 +1,5 @@
 ﻿using Common.Enum;
+using Repository;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,19 +29,25 @@ namespace Controller
         /// the main function of the application
         /// </summary>
         public void Begin() {
-            do
+            using (var uow = new UnitOfWork())
             {
-                try
+                do
                 {
-                    User.DisplayMainMenu(this);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    User.DisplayMainMenu(this);
-                }
+                    try
+                    {
 
-            } while (_state != State.closed);
+                        User.DisplayMainMenu(this, uow);
+
+
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                        User.DisplayMainMenu(this, uow);
+                    }
+
+                } while (_state != State.closed);
+            }
         }
 
         /// <summary>
@@ -63,6 +70,5 @@ namespace Controller
             _state = State.closed;
         }
         #endregion
-        
     }
 }

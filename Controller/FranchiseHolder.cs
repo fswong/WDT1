@@ -13,7 +13,7 @@ namespace Controller
         #endregion
 
         #region ctor
-        public FranchiseHolder() : base(){
+        public FranchiseHolder(UnitOfWork uow) : base(uow:uow){
         }
         #endregion
 

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Repository
@@ -25,9 +24,15 @@ namespace Repository
         //}
         #endregion
 
+        #region override
+        /// <summary>
+        /// to use connection string in efcore
+        /// </summary>
+        /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(_connString);
         }
+        #endregion
     }
 }

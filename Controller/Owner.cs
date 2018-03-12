@@ -24,7 +24,7 @@ namespace Controller
         #endregion
 
         #region ctor
-        public Owner() : base() {
+        public Owner(UnitOfWork uow) : base(uow:uow) {
             // get the stock requests
             _stockRequests = new StockRequestRepository(_context).ListStockRequests();
             // get the owner inventory

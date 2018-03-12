@@ -16,7 +16,7 @@ namespace Controller
         /// <summary>
         /// generic constructor
         /// </summary>
-        public Customer():base() {
+        public Customer(UnitOfWork uow):base(uow:uow) {
         }
         #endregion
 

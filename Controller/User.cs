@@ -14,8 +14,9 @@ namespace Controller
         #endregion
 
         #region ctor
-        public User() {
+        public User(UnitOfWork uow) {
             _state = State.open;
+            _context = uow;
         }
         #endregion
 
@@ -57,7 +58,7 @@ namespace Controller
         /// technically anyone who sees this is a user?
         /// </summary>
         /// <param name="driver"></param>
-        public static void DisplayMainMenu(Driver driver)
+        public static void DisplayMainMenu(Driver driver, UnitOfWork uow)
         {
             Console.WriteLine("Welcome to Marvelous Magic");
             Console.WriteLine("==========================");
@@ -75,20 +76,20 @@ namespace Controller
                     switch (response)
                     {
                         case "1":
-                            user = new Owner();
+                            user = new Owner(uow);
                             break;
                         case "2":
-                            user = new FranchiseHolder();
+                            user = new FranchiseHolder(uow);
                             break;
                         case "3":
-                            user = new Customer();
+                            user = new Customer(uow);
                             break;
                         case "4":
                             driver.CloseApplication();
                             break;
                         default:
                             Console.WriteLine("Invalid Input");
-                            DisplayMainMenu(driver);
+                            DisplayMainMenu(driver, uow);
                             break;
                     }
                 }
@@ -97,7 +98,7 @@ namespace Controller
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                DisplayMainMenu(driver);
+                DisplayMainMenu(driver, uow);
             }
             finally
             {
