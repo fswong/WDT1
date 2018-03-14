@@ -23,7 +23,7 @@ namespace BusinessObject
         /// <param name="uow"></param>
         /// <param name="id"></param>
         public Store(UnitOfWork uow, int StoreID, UserType UserType) : base(uow: uow) {
-            _repository = new StoreRepository(uow);
+            _repository = new StoreRepository();
             _poco = _repository.GetStoreById(StoreID);
             _inventory = GetInventoryProducts(true);
             _notInventory = GetInventoryProducts(false);

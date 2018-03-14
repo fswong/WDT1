@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System.Text;
 using Repository;
 using Common.Interface;
+using Common.Enum;
 
 namespace Controller
 {
     public class FranchiseHolder : User, IStorefront
     {
         #region properties
-        public BusinessObject.Store _store { get; set; }
+        public BusinessObject.Store _store { get; protected set; }
+        public List<DataObject.Store> _stores { get; protected set; }
         #endregion
 
         #region ctor
         public FranchiseHolder(UnitOfWork uow) : base(uow:uow){
+            Action();
         }
         #endregion
 
@@ -82,8 +85,57 @@ namespace Controller
         /// </summary>
         public void DisplayStoreList()
         {
-            throw new NotImplementedException();
+            try {
+                Console.WriteLine("Stores");
+                Console.WriteLine(" ");
+
+                if (_stores == null) {
+                    _stores = new StoreRepository().ListStores();
+                }
+
+                foreach (var obj in _stores)
+                {
+                    string row = obj.StoreID.ToString().PadRight((int)Padding.id) +
+                        obj.Name.PadRight((int)Padding.name);
+                    Console.WriteLine(row);
+                }
+
+                Console.WriteLine(" ");
+                Console.Write("Enter an option: ");
+
+                var input = Console.ReadLine();
+                int inputParsed = Convert.ToInt32(input);
+
+                if (inputParsed < _stores.Count) {
+                    _store = new BusinessObject.Store(_context,inputParsed,UserType.franchiseholder);
+                }
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.Message);
+            }
         }
+
+        /// <summary>
+        /// initiate the class
+        /// </summary>
+        public override void Action() {
+            try {
+                do {
+                    if (_store == null)
+                    {
+                        DisplayStoreList();
+                    }
+                    else
+                    {
+                        DisplayUserMenu();
+                    }
+                } while (_state!=State.closed);
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+            }
+            
+        }
+
         #endregion
     }
 }

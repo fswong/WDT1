@@ -36,7 +36,7 @@ namespace Controller
         /// <summary>
         /// begin user transaction
         /// </summary>
-        public void Action() {
+        public virtual void Action() {
             do
             {
                 try

@@ -29,7 +29,7 @@ namespace Controller
             _stockRequests = new StockRequestRepository(_context).ListStockRequests();
 
             // get the owner inventory
-            _ownerInventory = new OwnerInventoryRepository(_context).ListOwnerInventory();
+            _ownerInventory = new OwnerInventoryRepository().ListOwnerInventory();
 
             // begin transaction
             Action();
@@ -164,13 +164,22 @@ namespace Controller
                 Console.WriteLine("Enter product ID to reset:");
 
                 var input =Console.ReadLine();
-
                 var product = _ownerInventory.Find(item => item.ProductID.ToString() == input);
 
                 if (product.StockLevel < _MAXSTOCK)
                 {
-                    product = new OwnerInventoryRepository(_context).UpdateOwnerInventory(product.ProductID, _MAXSTOCK);
-                    Console.WriteLine(product.ProductID + " stocklevel has been reset to " + _MAXSTOCK);
+                    var oiRepo = new OwnerInventoryRepository();
+                    try
+                    {
+                        //update
+                        product = oiRepo.UpdateOwnerInventory(product.ProductID, _MAXSTOCK);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    _ownerInventory = oiRepo.ListOwnerInventory();
+                    Console.WriteLine(product.ProductID + " stocklevel has been reset to " + product.StockLevel);
                 }
                 else {
                     Console.WriteLine(product.ProductID + " already has enough stock");
@@ -198,7 +207,7 @@ namespace Controller
                     {
                         //reduce the owner stock
                         product.StockLevel = product.StockLevel - StockRequest.Quantity;
-                        product = new OwnerInventoryRepository(_context).UpdateOwnerInventory(product.ProductID, product.StockLevel);
+                        product = new OwnerInventoryRepository().UpdateOwnerInventory(product.ProductID, product.StockLevel);
 
                         //add store stock
                         var siRepo = new StoreInventoryRepository(_context);

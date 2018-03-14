@@ -6,13 +6,13 @@ using System.Text;
 
 namespace Repository
 {
-    public class ProductRepository : Repository
+    public class ProductRepository
     {
         #region properties
         #endregion
 
         #region ctor
-        public ProductRepository(UnitOfWork uow) : base(uow:uow) { }
+        public ProductRepository(){ }
         #endregion
 
         #region get
@@ -21,15 +21,9 @@ namespace Repository
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public DataObject.Product GetProductById(int id, bool allowedNotfound = false) {
+        public DataObject.Product GetProductById(int id) {
             try {
                 string query = $" SELECT * FROM Product WHERE ProductID='{id}' ";
-                if (allowedNotfound) {
-                    return _context.ProductSet.FromSql(query).FirstOrDefault();
-                }
-                else {
-                    return _context.ProductSet.FromSql(query).First();
-                }
             }
             catch (Exception) {
                 throw;

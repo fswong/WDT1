@@ -8,7 +8,7 @@ namespace Repository
     {
         #region properties
         // DO NOT commit the file with this string
-        private const string _connString = "Server=<SERVERADDRESS>;User Id=<USERID>;Password=<PASSWORD>";
+        private const string _connString = "";
 
         // EF related
         public DbSet<DataObject.OwnerInventory> OwnerInventorySet { get; set; }
@@ -32,6 +32,17 @@ namespace Repository
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(_connString);
+        }
+
+        /// <summary>
+        /// fluent api to handle multiple keys
+        /// https://github.com/aspnet/EntityFrameworkCore/issues/2344
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<DataObject.StoreInventory>()
+                .HasKey(c => new { c.StoreID, c.ProductID });
         }
         #endregion
     }
