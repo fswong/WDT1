@@ -19,7 +19,7 @@ namespace BusinessObject
         /// <param name="uow"></param>
         /// <param name="id"></param>
         public Product(UnitOfWork uow, int ProductID):base(uow:uow) {
-            _repository = new ProductRepository(uow);
+            _repository = new ProductRepository();
             _poco = _repository.GetProductById(ProductID);
         }
         #endregion

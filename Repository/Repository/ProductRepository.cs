@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DataObject.Extension;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,8 +25,21 @@ namespace Repository
         public DataObject.Product GetProductById(int id) {
             try {
                 string query = $" SELECT * FROM Product WHERE ProductID='{id}' ";
+                return DBConn.Select(query).ToProductPOCO();
             }
             catch (Exception) {
+                throw;
+            }
+        }
+
+        public List<DataObject.Product> GetProductList() {
+            try
+            {
+                string query = $" SELECT * FROM Product; ";
+                return DBConn.GetDataTable(query).ToProductListPOCO();
+            }
+            catch (Exception)
+            {
                 throw;
             }
         }
@@ -36,24 +50,25 @@ namespace Repository
         /// <param name="storeId"></param>
         /// <param name="inInventory"></param>
         /// <returns></returns>
-        public List<DataObject.Product> GetInventoryProduct(int storeId, bool inInventory) {
-            try
-            {
-                string query = " SELECT * FROM Product WHERE Id ";
-                if (inInventory) {
-                    query += " IN ";
-                }
-                else {
-                    query += " NOT IN ";
-                }
-                query += $" (SELECT DISTINCT ProductId FROM Inventory WHERE StoreId = '{storeId}') ";
-                return _context.ProductSet.FromSql(query).ToList();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        //public List<DataObject.Product> GetInventoryProduct(int storeId, bool inInventory) {
+        //    try
+        //    {
+        //        // TODO fix this
+        //        string query = " SELECT * FROM Product WHERE Id ";
+        //        if (inInventory) {
+        //            query += " IN ";
+        //        }
+        //        else {
+        //            query += " NOT IN ";
+        //        }
+        //        query += $" (SELECT DISTINCT ProductId FROM Inventory WHERE StoreId = '{storeId}') ";
+        //        return DBConn.GetDataTable(query).To
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
 
         
         #endregion

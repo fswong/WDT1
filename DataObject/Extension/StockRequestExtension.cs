@@ -12,7 +12,7 @@ namespace DataObject.Extension
         /// </summary>
         /// <param name="theDT"></param>
         /// <returns></returns>
-        public static List<DataObject.Store> ToStoreListPOCO(this DataTable theDT)
+        public static List<DataObject.Store> ToStockRequestListPOCO(this DataTable theDT)
         {
             try
             {
@@ -40,7 +40,7 @@ namespace DataObject.Extension
         /// </summary>
         /// <param name="theArray"></param>
         /// <returns></returns>
-        public static DataObject.Store ToStorePOCO(this string[] theArray)
+        public static DataObject.Store ToStockRequestPOCO(this string[] theArray)
         {
             try
             {
