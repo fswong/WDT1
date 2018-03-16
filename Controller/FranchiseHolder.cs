@@ -15,7 +15,7 @@ namespace Controller
         #endregion
 
         #region ctor
-        public FranchiseHolder(UnitOfWork uow) : base(uow:uow){
+        public FranchiseHolder() : base(){
             Action();
         }
         #endregion
@@ -77,7 +77,45 @@ namespace Controller
         /// </summary>
         public override void DisplayUserMenu()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            Console.WriteLine("Welcome to Marvelous Magic (Franchise Holder)");
+            Console.WriteLine("==========================");
+            Console.WriteLine("1. Display Inventory");
+            Console.WriteLine("2. Display Stock Request");
+            Console.WriteLine("3. Add New Inventory Item");
+            Console.WriteLine("4. Return to Main Menu");
+            Console.WriteLine(" ");
+            Console.Write("Enter an option:");
+
+            try
+            {
+                var response = Console.ReadLine();
+                switch (response)
+                {
+                    case "1":
+                        throw new NotImplementedException();
+                        break;
+                    case "2":
+                        throw new NotImplementedException();
+                        break;
+                    case "3":
+                        throw new NotImplementedException();
+                        break;
+                    case "4":
+                        _state = State.closed;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid Input");
+                        //DisplayUserMenu();
+                        break;
+
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                //DisplayUserMenu();
+            }
         }
 
         /// <summary>
@@ -107,7 +145,7 @@ namespace Controller
                 int inputParsed = Convert.ToInt32(input);
 
                 if (inputParsed < _stores.Count) {
-                    _store = new BusinessObject.Store(_context,inputParsed,UserType.franchiseholder);
+                    _store = new BusinessObject.Store(inputParsed,UserType.franchiseholder);
                 }
             }
             catch (Exception e) {

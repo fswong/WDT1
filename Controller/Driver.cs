@@ -35,10 +35,7 @@ namespace Controller
                 {
                     try
                     {
-
                         User.DisplayMainMenu(this, uow);
-
-
                     }
                     catch (Exception e)
                     {

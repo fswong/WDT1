@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DataObject.Extension;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,10 +7,10 @@ using System.Text;
 
 namespace Repository
 {
-    public class StoreInventoryRepository : Repository
+    public class StoreInventoryRepository
     {
         #region ctor
-        public StoreInventoryRepository(UnitOfWork uow) : base(uow:uow) { }
+        public StoreInventoryRepository() { }
         #endregion
 
         #region get
@@ -22,10 +23,11 @@ namespace Repository
         public List<DataObject.StoreInventory> GetStoreInventoryByStoreId(int StoreID, bool inInventory) {
             try
             {
-                // TODO fix query
                 string query = " SELECT si.* FROM StoreInventory si " +
-                    " INNER JOIN Product p ON si.ProductId = p.ProductId ";
-                return _context.StoreInventorySet.FromSql(query).ToList();
+                    " INNER JOIN Product p ON si.ProductID = p.ProductID " +
+                    " INNER JOIN Store s ON si.StoreID = s.StoreID " +
+                    $" WHERE si.StoreID = '{StoreID}' ";
+                return DBConn.GetDataTable(query).ToStoreInventoryListPOCO();
             }
             catch (Exception) {
                 throw;
@@ -37,20 +39,15 @@ namespace Repository
         /// </summary>
         /// <param name="StoreID"></param>
         /// <param name="ProductID"></param>
-        /// <param name="allowedNotFound"></param>
         /// <returns></returns>
-        public DataObject.StoreInventory GetStoreInventoryByStoreIdAndProductId(int StoreID, int ProductID, bool allowedNotFound = false) {
+        public DataObject.StoreInventory GetStoreInventoryByStoreIdAndProductId(int StoreID, int ProductID) {
             try
             {
-                // TODO fix query
-                string query = " SELECT si.* FROM StoreInventory si " +
-                    " INNER JOIN Product p ON si.ProductId = p.ProductId ";
-                if (allowedNotFound) {
-                    return _context.StoreInventorySet.FromSql(query).FirstOrDefault();
-                }
-                else {
-                    return _context.StoreInventorySet.FromSql(query).First();
-                }
+                string query = " SELECT si.*, p.Name AS ProductName, s.Name AS StoreName FROM StoreInventory si " +
+                    " INNER JOIN Product p ON si.ProductID = p.ProductID " +
+                    " INNER JOIN Store s ON si.StoreID = s.StoreID " +
+                    $" WHERE si.StoreID = '{StoreID}' AND si.ProductID = '{ProductID}' ";
+                return DBConn.Select(query).ToStoreInventoryPOCO();
             }
             catch (Exception) {
                 throw;
@@ -65,12 +62,12 @@ namespace Repository
         /// <param name="StoreID"></param>
         /// <param name="ProductID"></param>
         /// <returns></returns>
-        public DataObject.StoreInventory CreateStoreInventory(int StoreID, int ProductID) {
+        public DataObject.StoreInventory CreateStoreInventory(int StoreID, int ProductID, int Quantity) {
             try {
                 string query = " INSERT INTO StoreInventory " +
                     " (StoreID,ProductID,StockLevel) VALUES " +
-                    $" ({StoreID},{ProductID},'1') ";
-                _context.Database.ExecuteSqlCommand(query);
+                    $" ({StoreID},{ProductID},'{Quantity}') ";
+                DBConn.Insert(query);
 
                 return GetStoreInventoryByStoreIdAndProductId(StoreID, ProductID); ;
             } catch (Exception) {
@@ -90,7 +87,7 @@ namespace Repository
         public DataObject.StoreInventory UpdateStoreInventory(int ProductID, int StoreID, long Quantity) {
             try {
                 string query = $" UPDATE StoreInventory SET StockLevel = '{Quantity}' WHERE ProductID = '{ProductID}' AND StoreID = '{StoreID}'; ";
-                _context.Database.ExecuteSqlCommand(query);
+                DBConn.Update(query);
 
                 return GetStoreInventoryByStoreIdAndProductId(StoreID, ProductID); ;
             }

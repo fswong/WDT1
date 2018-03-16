@@ -6,6 +6,7 @@ using System.Text;
 
 namespace BusinessObject
 {
+    // technically this is the only BO in this whole project
     public class Store : BusinessObject
     {
         #region properties
@@ -22,11 +23,10 @@ namespace BusinessObject
         /// </summary>
         /// <param name="uow"></param>
         /// <param name="id"></param>
-        public Store(UnitOfWork uow, int StoreID, UserType UserType) : base(uow: uow) {
+        public Store(int StoreID, UserType UserType) : base(Id: StoreID) {
             _repository = new StoreRepository();
             _poco = _repository.GetStoreById(StoreID);
             _inventory = GetInventoryProducts(true);
-            _notInventory = GetInventoryProducts(false);
         }
         #endregion
 
@@ -38,7 +38,7 @@ namespace BusinessObject
         /// <returns></returns>
         public List<DataObject.StoreInventory> GetInventoryProducts(bool inInventory = true) {
             try {
-                return new StoreInventoryRepository(_context).GetStoreInventoryByStoreId(_poco.StoreID, inInventory);
+                return new StoreInventoryRepository().GetStoreInventoryByStoreId(_poco.StoreID, inInventory);
             }
             catch (Exception e) {
                 Console.WriteLine(e.Message);

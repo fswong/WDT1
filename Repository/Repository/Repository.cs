@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Repository
 {
+    // this is not required by this project
     public abstract class Repository
     {
         #region properties

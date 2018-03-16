@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Repository
 {
+    // this is technically not required, keeping this class for future reference only
     public class UnitOfWork : DbContext
     {
         #region properties
@@ -19,9 +20,9 @@ namespace Repository
         #endregion
 
         #region ctor
-        //public UnitOfWork()
-        //{
-        //}
+        public UnitOfWork()
+        {
+        }
         #endregion
 
         #region override

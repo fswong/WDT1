@@ -10,13 +10,11 @@ namespace Controller
     {
         #region properties
         protected State _state;
-        protected UnitOfWork _context;
         #endregion
 
         #region ctor
-        public User(UnitOfWork uow) {
+        public User() {
             _state = State.open;
-            _context = uow;
         }
         #endregion
 
@@ -78,13 +76,13 @@ namespace Controller
                     switch (response)
                     {
                         case "1":
-                            user = new Owner(uow);
+                            user = new Owner();
                             break;
                         case "2":
-                            user = new FranchiseHolder(uow);
+                            user = new FranchiseHolder();
                             break;
                         case "3":
-                            user = new Customer(uow);
+                            user = new Customer();
                             break;
                         case "4":
                             driver.CloseApplication();

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DataObject.Extension;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,10 +7,10 @@ using System.Text;
 
 namespace Repository
 {
-    public class StockRequestRepository : Repository
+    public class StockRequestRepository
     {
         #region ctor
-        public StockRequestRepository(UnitOfWork uow) : base(uow:uow) { }
+        public StockRequestRepository() { }
         #endregion
 
         #region get
@@ -25,23 +26,27 @@ namespace Repository
                     " INNER JOIN Store s ON sr.StoreID = s.StoreID " +
                     " INNER JOIN Product p ON sr.ProductID = p.ProductID " +
                     " INNER JOIN OwnerInventory oi ON sr.ProductID = oi.ProductID ";
-                //.WriteLine(query);
-                return _context.StockRequestSet.FromSql(query).ToList();
+                return DBConn.GetDataTable(query).ToStockRequestListPOCO();
             } catch (Exception) {
                 throw;
             }
         }
 
-        public DataObject.StockRequest GetStockRequestById(int StockRequestID, bool allowNotFound = false) {
+        /// <summary>
+        /// returns single stock request
+        /// </summary>
+        /// <param name="StockRequestID"></param>
+        /// <returns></returns>
+        public DataObject.StockRequest GetStockRequestById(int StockRequestID) {
             try {
-                // TODO fix query
-                string query = $" SELECT * FROM StockRequest WHERE StockRequestID = '{StockRequestID}' ";
-                if (allowNotFound) {
-                    return _context.StockRequestSet.FromSql(query).FirstOrDefault();
-                }
-                else {
-                    return _context.StockRequestSet.FromSql(query).First();
-                }
+                string query = " SELECT sr.*, s.Name AS StoreName, p.Name AS ProductName, oi.StockLevel AS CurrentStock, " +
+                    " CAST(CASE WHEN sr.Quantity >= StockLevel THEN 1 ELSE 0 END AS BIT) AS StockAvailability " +
+                    " FROM StockRequest sr " +
+                    " INNER JOIN Store s ON sr.StoreID = s.StoreID " +
+                    " INNER JOIN Product p ON sr.ProductID = p.ProductID " +
+                    " INNER JOIN OwnerInventory oi ON sr.ProductID = oi.ProductID " +
+                    $" WHERE StockRequestID = '{StockRequestID}' ";
+                    return DBConn.Select(query).ToStockRequestPOCO();
             } catch (Exception) {
                 throw;
             }
@@ -50,7 +55,7 @@ namespace Repository
 
         #region delete
         /// <summary>
-        /// 
+        /// generic row delete
         /// </summary>
         /// <param name="StockRequestID"></param>
         public void DeleteStockRequest(int StockRequestID)
@@ -58,7 +63,7 @@ namespace Repository
             try
             {
                 string query = $" SELECT * FROM StockRequest WHERE StockRequestID = '{StockRequestID}' ";
-                // TODO runquery
+                DBConn.Update(query);
             }
             catch (Exception)
             {

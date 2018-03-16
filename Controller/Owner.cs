@@ -24,9 +24,9 @@ namespace Controller
         #endregion
 
         #region ctor
-        public Owner(UnitOfWork uow) : base(uow:uow) {
+        public Owner() : base() {
             // get the stock requests
-            _stockRequests = new StockRequestRepository(_context).ListStockRequests();
+            _stockRequests = new StockRequestRepository().ListStockRequests();
 
             // get the owner inventory
             _ownerInventory = new OwnerInventoryRepository().ListOwnerInventory();
@@ -118,7 +118,6 @@ namespace Controller
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                //DisplayUserMenu();
             }
         }
 
@@ -136,13 +135,10 @@ namespace Controller
                 DisplayOwnerInventoryView();
 
                 Console.WriteLine(" ");
-
-                //DisplayUserMenu();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                //DisplayUserMenu();
             }
         }
 
@@ -188,7 +184,6 @@ namespace Controller
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                //DisplayUserMenu();
             }
         }
 
@@ -210,13 +205,13 @@ namespace Controller
                         product = new OwnerInventoryRepository().UpdateOwnerInventory(product.ProductID, product.StockLevel);
 
                         //add store stock
-                        var siRepo = new StoreInventoryRepository(_context);
+                        var siRepo = new StoreInventoryRepository();
                         var storeInventory = siRepo.GetStoreInventoryByStoreIdAndProductId(StockRequest.StoreID, product.ProductID);
                         storeInventory.StockLevel = storeInventory.StockLevel + StockRequest.Quantity;
                         siRepo.UpdateStoreInventory(product.ProductID, StockRequest.StoreID, storeInventory.StockLevel);
 
                         //delete stock request
-                        new StockRequestRepository(_context).DeleteStockRequest(StockRequest.StockRequestID);
+                        new StockRequestRepository().DeleteStockRequest(StockRequest.StockRequestID);
                     }
                 }
                 else {
@@ -227,7 +222,6 @@ namespace Controller
             }
             catch (Exception e) {
                 Console.WriteLine(e.Message);
-                //DisplayUserMenu();
             }
 
         }
@@ -255,7 +249,6 @@ namespace Controller
             }
             catch (Exception e) {
                 Console.WriteLine(e.Message);
-                //DisplayUserMenu();
             }
             
         }
