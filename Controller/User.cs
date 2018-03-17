@@ -56,7 +56,7 @@ namespace Controller
         /// technically anyone who sees this is a user?
         /// </summary>
         /// <param name="driver"></param>
-        public static void DisplayMainMenu(Driver driver, UnitOfWork uow)
+        public static void DisplayMainMenu(Driver driver)
         {
             Console.WriteLine("Welcome to Marvelous Magic");
             Console.WriteLine("==========================");
@@ -89,7 +89,6 @@ namespace Controller
                             break;
                         default:
                             Console.WriteLine("Invalid Input");
-                            DisplayMainMenu(driver, uow);
                             break;
                     }
                 }
@@ -98,7 +97,6 @@ namespace Controller
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                DisplayMainMenu(driver, uow);
             }
             finally
             {

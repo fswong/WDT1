@@ -178,7 +178,7 @@ namespace Controller
                     Console.WriteLine(product.ProductID + " stocklevel has been reset to " + product.StockLevel);
                 }
                 else {
-                    Console.WriteLine(product.ProductID + " already has enough stock");
+                    Console.WriteLine(product.Name + " already has enough stock");
                 }
             }
             catch (Exception e)
@@ -227,15 +227,24 @@ namespace Controller
         }
         #endregion
 
-        #region view
+        #region inherited
         /// <summary>
         /// owner inventory view
         /// </summary>
         public void DisplayOwnerInventoryView() {
             try {
                 //generic header
-                string header = "ID Product Current Stock";
-                Console.WriteLine(header);
+                string[] header = { "ID", "Product", "Current Stock" };
+                header[0] = header[0].PadRight((int)Padding.id, ' ');
+                header[1] = header[1].PadRight((int)Padding.name, ' ');
+                header[2] = header[2].PadRight((int)Padding.quantity, ' ');
+
+                string headerString = "";
+                foreach (string str in header) {
+                    headerString += str;
+                }
+
+                Console.WriteLine(headerString);
 
                 //generate details
                 foreach (var item in _ownerInventory)

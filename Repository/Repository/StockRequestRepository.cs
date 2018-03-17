@@ -62,7 +62,7 @@ namespace Repository
         {
             try
             {
-                string query = $" SELECT * FROM StockRequest WHERE StockRequestID = '{StockRequestID}' ";
+                string query = $" DELETE FROM StockRequest WHERE StockRequestID = '{StockRequestID}' ";
                 DBConn.Update(query);
             }
             catch (Exception)

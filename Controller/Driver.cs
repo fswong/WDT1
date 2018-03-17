@@ -29,22 +29,18 @@ namespace Controller
         /// the main function of the application
         /// </summary>
         public void Begin() {
-            using (var uow = new UnitOfWork())
+            do
             {
-                do
+                try
                 {
-                    try
-                    {
-                        User.DisplayMainMenu(this, uow);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e.Message);
-                        User.DisplayMainMenu(this, uow);
-                    }
+                    User.DisplayMainMenu(this);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
 
-                } while (_state != State.closed);
-            }
+            } while (_state != State.closed);
         }
 
         /// <summary>

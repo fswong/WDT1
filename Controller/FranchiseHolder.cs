@@ -24,23 +24,23 @@ namespace Controller
         /// <summary>
         /// Returns list of items
         /// </summary>
-        /// <param name="inInventory">Toggles if in or not in inventory</param>
-        /// <returns></returns>
-        public List<DataObject.Product> DisplayInventory(bool inInventory = true) {
+        public void DisplayInventory(bool inInventory = true) {
             try {
+                throw new NotImplementedException();
 
-                return new List<DataObject.Product>();
             } catch (Exception e) {
                 throw;
             }
         }
 
-        public List<DataObject.Product> StockRequest()
+        /// <summary>
+        /// 
+        /// </summary>
+        public void DisplayStockRequest()
         {
             try
             {
-
-                return DisplayInventory();
+                throw new NotImplementedException();
             }
             catch (Exception e)
             {
@@ -52,18 +52,17 @@ namespace Controller
         /// Adds 1 unit of an item that is not in the inventory
         /// Quantity of item is set to zero
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public List<DataObject.Product> AddNewInventoryItem(int id)
+        public void AddNewInventoryItem()
         {
             try
             {
+                throw new NotImplementedException();
                 // check that the item is not in the list
 
                 // add to list
 
                 // delete from other list
-                return DisplayInventory();
+
             }
             catch (Exception e)
             {
@@ -71,7 +70,9 @@ namespace Controller
                 throw;
             }
         }
+        #endregion
 
+        #region inherited
         /// <summary>
         /// the root franchise holder view
         /// </summary>
@@ -93,20 +94,19 @@ namespace Controller
                 switch (response)
                 {
                     case "1":
-                        throw new NotImplementedException();
+                        DisplayInventory();
                         break;
                     case "2":
-                        throw new NotImplementedException();
+                        DisplayStockRequest();
                         break;
                     case "3":
-                        throw new NotImplementedException();
+                        AddNewInventoryItem();
                         break;
                     case "4":
                         _state = State.closed;
                         break;
                     default:
                         Console.WriteLine("Invalid Input");
-                        //DisplayUserMenu();
                         break;
 
                 }
@@ -114,7 +114,6 @@ namespace Controller
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                //DisplayUserMenu();
             }
         }
 
@@ -123,11 +122,13 @@ namespace Controller
         /// </summary>
         public void DisplayStoreList()
         {
-            try {
+            try
+            {
                 Console.WriteLine("Stores");
                 Console.WriteLine(" ");
 
-                if (_stores == null) {
+                if (_stores == null)
+                {
                     _stores = new StoreRepository().ListStores();
                 }
 
@@ -144,11 +145,13 @@ namespace Controller
                 var input = Console.ReadLine();
                 int inputParsed = Convert.ToInt32(input);
 
-                if (inputParsed < _stores.Count) {
-                    _store = new BusinessObject.Store(inputParsed,UserType.franchiseholder);
+                if (inputParsed < _stores.Count)
+                {
+                    _store = new BusinessObject.Store(inputParsed, UserType.franchiseholder);
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Console.WriteLine(e.Message);
             }
         }
@@ -156,9 +159,12 @@ namespace Controller
         /// <summary>
         /// initiate the class
         /// </summary>
-        public override void Action() {
-            try {
-                do {
+        public override void Action()
+        {
+            try
+            {
+                do
+                {
                     if (_store == null)
                     {
                         DisplayStoreList();
@@ -167,13 +173,14 @@ namespace Controller
                     {
                         DisplayUserMenu();
                     }
-                } while (_state!=State.closed);
-            } catch (Exception e) {
+                } while (_state != State.closed);
+            }
+            catch (Exception e)
+            {
                 Console.WriteLine(e.Message);
             }
-            
-        }
 
+        }
         #endregion
     }
 }
