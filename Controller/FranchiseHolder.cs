@@ -26,7 +26,8 @@ namespace Controller
         /// </summary>
         public void DisplayInventory(bool inInventory = true) {
             try {
-                throw new NotImplementedException();
+                _store.DisplayInventory();
+
 
             } catch (Exception e) {
                 throw;
@@ -56,13 +57,20 @@ namespace Controller
         {
             try
             {
-                throw new NotImplementedException();
-                // check that the item is not in the list
+                // list stuff thats not in
+                var notInInventory = _store.DisplayNotInInventory();
 
                 // add to list
+                var input = Console.ReadLine();
+                int inputParsed = Convert.ToInt32(input);
 
-                // delete from other list
+                if (inputParsed < notInInventory.Count && inputParsed <= 0)
+                {
 
+                }
+                else {
+                    Console.WriteLine("Invalid Input");
+                }
             }
             catch (Exception e)
             {

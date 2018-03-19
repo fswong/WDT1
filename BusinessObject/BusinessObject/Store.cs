@@ -45,6 +45,52 @@ namespace BusinessObject
                 throw;
             }
         }
+
+        /// <summary>
+        /// lists inventory
+        /// </summary>
+        public void DisplayInventory() {
+            //display
+            Console.WriteLine("Stock Requests");
+            Console.WriteLine(" ");
+
+            string headerRow = "Id  " +
+                "" +
+                "" +
+                "" +
+                "" +
+                "";
+            Console.WriteLine(headerRow);
+            foreach (var item in _inventory) {
+
+            }
+        }
+
+        /// <summary>
+        /// lists inventory
+        /// </summary>
+        public List<DataObject.Product> DisplayNotInInventory()
+        {
+            //display
+            Console.WriteLine("Add to Inventory");
+            Console.WriteLine(" ");
+
+            var NotInInventory = new ProductRepository().GetNotInInventory(_poco.StoreID);
+
+            string headerRow = "Id" +
+                "" +
+                "" +
+                "" +
+                "" +
+                "";
+            Console.WriteLine(headerRow);
+            foreach (var item in _inventory)
+            {
+
+            }
+
+            return NotInInventory;
+        }
         #endregion
     }
 }

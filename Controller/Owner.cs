@@ -201,7 +201,25 @@ namespace Controller
                     if (product.StockLevel > StockRequest.Quantity && StockRequest.StockAvailability)
                     {
                         //reduce the owner stock
-                        product.StockLevel = product.StockLevel - StockRequest.Quantity;
+                        //using (var uow = new UnitOfWork()) {
+                        //    try
+                        //    {
+
+
+                        //    }
+                        //    catch (Exception e)
+                        //    {
+                        //        Console.WriteLine(e.Message);
+                        //    }
+                        //    finally
+                        //    {
+                        //        uow.Dispose();
+                        //        uow.Close();
+                        //    }
+                        //}
+                            
+
+                            product.StockLevel = product.StockLevel - StockRequest.Quantity;
                         product = new OwnerInventoryRepository().UpdateOwnerInventory(product.ProductID, product.StockLevel);
 
                         //add store stock
@@ -212,6 +230,9 @@ namespace Controller
 
                         //delete stock request
                         new StockRequestRepository().DeleteStockRequest(StockRequest.StockRequestID);
+                    }
+                    else {
+
                     }
                 }
                 else {

@@ -44,6 +44,19 @@ namespace Repository
             }
         }
 
+        public List<DataObject.Product> GetNotInInventory(int StoreID) {
+            try
+            {
+                string query = $" SELECT p.* FROM Product p " +
+                    $" WHERE ProductID NOT IN ( SELECT ProductID FROM StoreInventory WHERE StoreID={StoreID} ) ";
+                return DBConn.GetDataTable(query).ToProductListPOCO();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         /// <summary>
         /// Returns list of products available/unavailable in store
         /// </summary>

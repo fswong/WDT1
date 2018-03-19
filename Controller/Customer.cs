@@ -24,6 +24,13 @@ namespace Controller
         #endregion
 
         #region method
+        public void DisplayProducts() {
+            var products = new StoreInventoryRepository().GetStoreInventoryByStoreId(_store._poco.StoreID, true);
+            
+        }
+        #endregion
+
+        #region inherited
         public override void DisplayUserMenu()
         {
             Console.WriteLine("Welcome to Marvelous Magic (Customer)");
@@ -39,22 +46,19 @@ namespace Controller
                 switch (response)
                 {
                     case "1":
-                        throw new NotImplementedException();
+                        DisplayProducts();
                         break;
                     case "2":
                         _state = State.closed;
                         break;
                     default:
                         Console.WriteLine("Invalid Input");
-                        //DisplayUserMenu();
                         break;
-
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                //DisplayUserMenu();
             }
         }
 
