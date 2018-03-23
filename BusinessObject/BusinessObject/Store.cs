@@ -23,7 +23,7 @@ namespace BusinessObject
         /// </summary>
         /// <param name="uow"></param>
         /// <param name="id"></param>
-        public Store(int StoreID, UserType UserType) : base(Id: StoreID) {
+        public Store(int StoreID) : base(Id: StoreID) {
             _repository = new StoreRepository();
             _poco = _repository.GetStoreById(StoreID);
             _inventory = GetInventoryProducts(true);
@@ -36,7 +36,7 @@ namespace BusinessObject
         /// </summary>
         /// <param name="inInventory"></param>
         /// <returns></returns>
-        public List<DataObject.StoreInventory> GetInventoryProducts(bool inInventory = true) {
+        private List<DataObject.StoreInventory> GetInventoryProducts(bool inInventory = true) {
             try {
                 return new StoreInventoryRepository().GetStoreInventoryByStoreId(_poco.StoreID, inInventory);
             }
@@ -49,21 +49,8 @@ namespace BusinessObject
         /// <summary>
         /// lists inventory
         /// </summary>
-        public void DisplayInventory() {
-            //display
-            Console.WriteLine("Stock Requests");
-            Console.WriteLine(" ");
-
-            string headerRow = "Id  " +
-                "" +
-                "" +
-                "" +
-                "" +
-                "";
-            Console.WriteLine(headerRow);
-            foreach (var item in _inventory) {
-
-            }
+        public List<DataObject.StoreInventory> ListStoreInventory() {
+            return _inventory;
         }
 
         /// <summary>
@@ -84,12 +71,62 @@ namespace BusinessObject
                 "" +
                 "";
             Console.WriteLine(headerRow);
-            foreach (var item in _inventory)
+            foreach (var item in NotInInventory)
             {
 
             }
 
             return NotInInventory;
+        }
+
+        /// <summary>
+        /// create a new entry for a product in the inventory
+        /// </summary>
+        /// <param name="ProductID"></param>
+        /// <param name="StoreID"></param>
+        /// <param name="Quantity"></param>
+        public void AddToInventory(int ProductID, int Quantity = 1) {
+            //insert product into inventory
+            try
+            {
+                new StoreInventoryRepository().CreateStoreInventory(ProductID: ProductID, StoreID: _poco.StoreID, Quantity: Quantity);
+            }
+            catch (Exception) {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// displays list of stock below threshold
+        /// </summary>
+        /// <param name="Threshold"></param>
+        /// <returns></returns>
+        public List<DataObject.StoreInventory> DisplayStockThreshold(int Threshold) {
+            try {
+                var stock = new StoreInventoryRepository().GetStoreRequestByStoreIdAndThreshold(StoreID: _poco.StoreID, Threshold: Threshold);
+                return stock;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// creates a store request for the product
+        /// </summary>
+        /// <param name="Threshold"></param>
+        /// <param name="ProductID"></param>
+        public void OrderStock(int Threshold, int ProductID) {
+            try
+            {
+                var repo = new StoreInventoryRepository();
+                    repo.CreateStoreInventory(StoreID: _poco.StoreID, ProductID: ProductID);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         #endregion
     }

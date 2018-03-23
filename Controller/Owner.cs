@@ -1,4 +1,5 @@
 ﻿using Common.Enum;
+using Common.Widgets;
 using Repository;
 using System;
 using System.Collections.Generic;
@@ -90,13 +91,21 @@ namespace Controller
                 Console.WriteLine("Stock Requests");
                 Console.WriteLine(" ");
 
-                string headerRow = "Id  " +
-                    "" +
-                    "" +
-                    "" +
-                    "" +
-                    "";
-                Console.WriteLine(headerRow);
+                string[] header = { "ID", "Store Name", "Product Name", "Quantity", "Current Stock", "Availability" };
+                header[0] = header[0].PadRight((int)Padding.id, ' ');
+                header[1] = header[1].PadRight((int)Padding.name, ' ');
+                header[2] = header[2].PadRight((int)Padding.name, ' ');
+                header[3] = header[3].PadRight((int)Padding.quantity, ' ');
+                header[4] = header[4].PadRight((int)Padding.quantity, ' ');
+                header[5] = header[5].PadRight((int)Padding.boolean, ' ');
+
+                string headerString = "";
+                foreach (string str in header)
+                {
+                    headerString += str;
+                }
+
+                Console.WriteLine(headerString);
 
                 IEnumerable<DataObject.StockRequest> result = _stockRequests;
 
@@ -157,7 +166,7 @@ namespace Controller
                 DisplayOwnerInventoryView();
 
                 Console.WriteLine(" ");
-                Console.WriteLine("Enter product ID to reset:");
+                Console.Write("Enter product ID to reset:");
 
                 var input =Console.ReadLine();
                 var product = _ownerInventory.Find(item => item.ProductID.ToString() == input);
@@ -254,6 +263,10 @@ namespace Controller
         /// </summary>
         public void DisplayOwnerInventoryView() {
             try {
+                var headers = new List<string>();
+                var content = new List<string>();
+                var footer = " ";
+
                 //generic header
                 string[] header = { "ID", "Product", "Current Stock" };
                 header[0] = header[0].PadRight((int)Padding.id, ' ');
@@ -265,7 +278,10 @@ namespace Controller
                     headerString += str;
                 }
 
-                Console.WriteLine(headerString);
+                headers.Add(headerString);
+                headers.Add(" ");
+
+                //Console.WriteLine(headerString);
 
                 //generate details
                 foreach (var item in _ownerInventory)
@@ -274,8 +290,11 @@ namespace Controller
                         item.ProductID.ToString().PadRight((int)Padding.id, ' ') +
                         item.Name.PadRight((int)Padding.name, ' ') +
                         item.StockLevel.ToString().PadRight((int)Padding.quantity, ' ');
-                    Console.WriteLine(outputRow);
+                    //Console.WriteLine(outputRow);
+                    content.Add(outputRow);
                 }
+
+                var obj = new WidgetPaging(headers, content, footer);
             }
             catch (Exception e) {
                 Console.WriteLine(e.Message);

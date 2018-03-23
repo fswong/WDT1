@@ -18,7 +18,7 @@ namespace Repository
         /// lists all stockrequests
         /// </summary>
         /// <returns></returns>
-        public List<DataObject.StockRequest> ListStockRequests() {
+        public List<DataObject.StockRequest> ListStockRequests(int? StoreID = null) {
             try {
                 string query = " SELECT sr.*, s.Name AS StoreName, p.Name AS ProductName, oi.StockLevel AS CurrentStock, " +
                     " CAST(CASE WHEN sr.Quantity >= StockLevel THEN 1 ELSE 0 END AS BIT) AS StockAvailability " +
@@ -26,6 +26,9 @@ namespace Repository
                     " INNER JOIN Store s ON sr.StoreID = s.StoreID " +
                     " INNER JOIN Product p ON sr.ProductID = p.ProductID " +
                     " INNER JOIN OwnerInventory oi ON sr.ProductID = oi.ProductID ";
+                if (StoreID != null) {
+                    query += $" WHERE s.StoreID ='{StoreID}' ";
+                }
                 return DBConn.GetDataTable(query).ToStockRequestListPOCO();
             } catch (Exception) {
                 throw;

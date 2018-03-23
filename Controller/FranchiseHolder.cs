@@ -4,6 +4,7 @@ using System.Text;
 using Repository;
 using Common.Interface;
 using Common.Enum;
+using System.Linq;
 
 namespace Controller
 {
@@ -26,7 +27,7 @@ namespace Controller
         /// </summary>
         public void DisplayInventory(bool inInventory = true) {
             try {
-                _store.DisplayInventory();
+                //_store.DisplayInventory();
 
 
             } catch (Exception e) {
@@ -35,13 +36,13 @@ namespace Controller
         }
 
         /// <summary>
-        /// 
+        /// display stock requests for the current store
         /// </summary>
         public void DisplayStockRequest()
         {
             try
             {
-                throw new NotImplementedException();
+                var stockRequest = new StockRequestRepository().ListStockRequests(_store._poco.StoreID);
             }
             catch (Exception e)
             {
@@ -64,9 +65,9 @@ namespace Controller
                 var input = Console.ReadLine();
                 int inputParsed = Convert.ToInt32(input);
 
-                if (inputParsed < notInInventory.Count && inputParsed <= 0)
+                if (notInInventory.Any(item => item.ProductID == inputParsed))
                 {
-
+                    _store.AddToInventory(ProductID: inputParsed);
                 }
                 else {
                     Console.WriteLine("Invalid Input");
@@ -155,7 +156,7 @@ namespace Controller
 
                 if (inputParsed < _stores.Count)
                 {
-                    _store = new BusinessObject.Store(inputParsed, UserType.franchiseholder);
+                    _store = new BusinessObject.Store(inputParsed);
                 }
             }
             catch (Exception e)

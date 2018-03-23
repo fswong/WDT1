@@ -118,7 +118,7 @@ namespace Controller
 
                 if (inputParsed < _stores.Count)
                 {
-                    _store = new BusinessObject.Store(inputParsed, UserType.franchiseholder);
+                    _store = new BusinessObject.Store(inputParsed);
                 }
             }
             catch (Exception e)
