@@ -23,7 +23,7 @@ namespace Repository
         public List<DataObject.StoreInventory> GetStoreInventoryByStoreId(int StoreID, bool inInventory) {
             try
             {
-                string query = " SELECT si.* FROM StoreInventory si " +
+                string query = " SELECT si.*, p.Name AS ProductName, s.Name AS StoreName FROM StoreInventory si " +
                     " INNER JOIN Product p ON si.ProductID = p.ProductID " +
                     " INNER JOIN Store s ON si.StoreID = s.StoreID " +
                     $" WHERE si.StoreID = '{StoreID}' ";

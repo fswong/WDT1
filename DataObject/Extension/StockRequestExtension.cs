@@ -12,18 +12,22 @@ namespace DataObject.Extension
         /// </summary>
         /// <param name="theDT"></param>
         /// <returns></returns>
-        public static List<DataObject.Store> ToStockRequestListPOCO(this DataTable theDT)
+        public static List<DataObject.StockRequest> ToStockRequestListPOCO(this DataTable theDT)
         {
             try
             {
-                List<DataObject.Store> result = new List<DataObject.Store>();
+                List<DataObject.StockRequest> result = new List<DataObject.StockRequest>();
                 foreach (DataRow row in theDT.Rows)
                 {
                     result.Add(
-                        new DataObject.Store
+                        new DataObject.StockRequest
                         {
+                            StockRequestID = Convert.ToInt32(row["StockRequestID"]),
                             StoreID = Convert.ToInt32(row["StoreID"]),
-                            Name = row["Name"].ToString()
+                            ProductID = Convert.ToInt32(row["ProductID"]),
+                            Quantity = Convert.ToInt32(row["Quantity"]),
+                            ProductName = row["ProductName"].ToString(),
+                            StoreName = row["StoreName"].ToString()
                         }
                         );
                 }
@@ -40,14 +44,18 @@ namespace DataObject.Extension
         /// </summary>
         /// <param name="theArray"></param>
         /// <returns></returns>
-        public static DataObject.Store ToStockRequestPOCO(this string[] theArray)
+        public static DataObject.StockRequest ToStockRequestPOCO(this string[] theArray)
         {
             try
             {
-                return new DataObject.Store
+                return new DataObject.StockRequest
                 {
-                    StoreID = Convert.ToInt32(theArray[0]),
-                    Name = theArray[1].ToString()
+                    StockRequestID = Convert.ToInt32(theArray[0]),
+                    StoreID = Convert.ToInt32(theArray[1]),
+                    ProductID = Convert.ToInt32(theArray[2]),
+                    Quantity = Convert.ToInt32(theArray[3]),
+                    ProductName = theArray[4].ToString(),
+                    StoreName = theArray[5].ToString()
                 };
             }
             catch (Exception)

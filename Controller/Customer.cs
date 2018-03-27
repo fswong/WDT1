@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Common.Enum;
 using Common.Interface;
+using Common.Widgets;
 using Repository;
 
 namespace Controller
@@ -25,8 +26,38 @@ namespace Controller
 
         #region method
         public void DisplayProducts() {
+            var headers = new List<string>();
+            var content = new List<string>();
+            var responses = new List<int>();
+            var footer = " ";
+
+            //generate header
+            string[] header = { "ID", "Product", "Current Stock" };
+            header[0] = header[0].PadRight((int)Padding.id, ' ');
+            header[1] = header[1].PadRight((int)Padding.name, ' ');
+            header[2] = header[2].PadRight((int)Padding.quantity, ' ');
+
+            string headerString = "";
+            foreach (string str in header)
+            {
+                headerString += str;
+            }
+
+            headers.Add(headerString);
+
             var products = new StoreInventoryRepository().GetStoreInventoryByStoreId(_store._poco.StoreID, true);
-            
+
+            //generate details
+            foreach (var item in products)
+            {
+                string outputRow =
+                    item.ProductID.ToString().PadRight((int)Padding.id, ' ') +
+                    item.ProductName.PadRight((int)Padding.name, ' ') +
+                    item.StockLevel.ToString().PadRight((int)Padding.quantity, ' ');
+                content.Add(outputRow);
+            }
+
+            var obj = new WidgetPaging(headers, content, footer, responses);
         }
         #endregion
 

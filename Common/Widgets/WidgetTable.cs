@@ -12,7 +12,7 @@ namespace Common.Widgets
         /// <param name="headers"></param>
         /// <param name="content"></param>
         /// <param name="footer"></param>
-        public static void DisplayTable(string[] headers, string[] content, string[] footer) {
+        public static void DisplayTable(List<string> headers, List<string> content, string footer) {
             /*
              *  Header
              *  
@@ -25,6 +25,17 @@ namespace Common.Widgets
              *  
              *  Enter an input
              */
+            foreach (var row in headers)
+            {
+                Console.WriteLine(row);
+            }
+
+            foreach (var row in content)
+            {
+                Console.WriteLine(row);
+            }
+
+            Console.Write(footer);
         }
     }
 }

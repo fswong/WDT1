@@ -1,4 +1,5 @@
 ﻿using Common.Enum;
+using Common.StaticMethods;
 using Common.Widgets;
 using Repository;
 using System;
@@ -163,32 +164,56 @@ namespace Controller
                 Console.WriteLine("Product stock will be reset to " + _MAXSTOCK);
                 Console.WriteLine(" ");
 
+                //display the table
                 DisplayOwnerInventoryView();
 
                 Console.WriteLine(" ");
                 Console.Write("Enter product ID to reset:");
 
                 var input =Console.ReadLine();
-                var product = _ownerInventory.Find(item => item.ProductID.ToString() == input);
+                int inputParsed;
 
-                if (product.StockLevel < _MAXSTOCK)
+                // validate that the input was integer
+                if (CommonFunctions.TryParseInt(input, out inputParsed))
                 {
-                    var oiRepo = new OwnerInventoryRepository();
-                    try
+                    //get the product
+                    var product = _ownerInventory.Find(item => item.ProductID.ToString() == input);
+
+                    //validate that the product is valid
+                    if (product != null)
                     {
-                        //update
-                        product = oiRepo.UpdateOwnerInventory(product.ProductID, _MAXSTOCK);
+                        //check that the stock level is below max
+                        if (product.StockLevel < _MAXSTOCK)
+                        {
+                            var oiRepo = new OwnerInventoryRepository();
+                            try
+                            {
+                                //update the product
+                                product = oiRepo.UpdateOwnerInventory(product.ProductID, _MAXSTOCK);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
+
+                            //refresh the list
+                            _ownerInventory = oiRepo.ListOwnerInventory();
+                            Console.WriteLine(product.ProductID + " stocklevel has been reset to " + product.StockLevel);
+                        }
+                        else
+                        {
+                            Console.WriteLine(product.Name + " already has enough stock");
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e.Message);
+                    else {
+                        Console.WriteLine("No such product found");
                     }
-                    _ownerInventory = oiRepo.ListOwnerInventory();
-                    Console.WriteLine(product.ProductID + " stocklevel has been reset to " + product.StockLevel);
                 }
                 else {
-                    Console.WriteLine(product.Name + " already has enough stock");
+                    Console.WriteLine("Invalid Input");
                 }
+
+                
             }
             catch (Exception e)
             {
@@ -267,7 +292,7 @@ namespace Controller
                 var content = new List<string>();
                 var footer = " ";
 
-                //generic header
+                //generate header
                 string[] header = { "ID", "Product", "Current Stock" };
                 header[0] = header[0].PadRight((int)Padding.id, ' ');
                 header[1] = header[1].PadRight((int)Padding.name, ' ');
@@ -279,9 +304,6 @@ namespace Controller
                 }
 
                 headers.Add(headerString);
-                headers.Add(" ");
-
-                //Console.WriteLine(headerString);
 
                 //generate details
                 foreach (var item in _ownerInventory)
@@ -290,11 +312,11 @@ namespace Controller
                         item.ProductID.ToString().PadRight((int)Padding.id, ' ') +
                         item.Name.PadRight((int)Padding.name, ' ') +
                         item.StockLevel.ToString().PadRight((int)Padding.quantity, ' ');
-                    //Console.WriteLine(outputRow);
                     content.Add(outputRow);
                 }
 
-                var obj = new WidgetPaging(headers, content, footer);
+                //var obj = new WidgetPaging(headers, content, footer);
+                WidgetTable.DisplayTable(headers, content, footer);
             }
             catch (Exception e) {
                 Console.WriteLine(e.Message);

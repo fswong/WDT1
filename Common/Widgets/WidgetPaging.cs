@@ -75,8 +75,6 @@ namespace Common.Widgets
                 Console.WriteLine(row);
             }
 
-            Console.WriteLine(" ");
-
             int rowCount = 0;
             foreach (var row in _content)
             {
