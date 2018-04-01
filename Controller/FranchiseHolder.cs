@@ -30,7 +30,7 @@ namespace Controller
                 //_store.DisplayInventory();
 
 
-            } catch (Exception e) {
+            } catch (Exception) {
                 throw;
             }
         }
@@ -44,7 +44,7 @@ namespace Controller
             {
                 var stockRequest = new StockRequestRepository().ListStockRequests(_store._poco.StoreID);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }

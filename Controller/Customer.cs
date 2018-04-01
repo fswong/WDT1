@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Common.Enum;
 using Common.Interface;
+using Common.StaticMethods;
 using Common.Widgets;
 using Repository;
 
@@ -11,8 +12,7 @@ namespace Controller
     public class Customer : User, IStorefront
     {
         #region properties
-        public BusinessObject.Store _store { get; protected set; }
-        public List<DataObject.Store> _stores { get; protected set; }
+        private BusinessObject.Store _store;
         #endregion
 
         #region ctor
@@ -25,7 +25,115 @@ namespace Controller
         #endregion
 
         #region method
-        public void DisplayProducts() {
+
+        //
+        private void PurchaseProduct(int ProductID, int Quantity) {
+            try {
+                //reset the business object
+                _store = new Transaction.Store().PurchaseItem(_store, ProductID, Quantity);
+            } catch (Exception e) {
+                WidgetError.DisplayError(e.Message);
+            }
+        }
+
+        #endregion
+
+        #region inherited
+
+        /// <summary>
+        /// initiate the class
+        /// </summary>
+        public override void Action()
+        {
+            try
+            {
+                do
+                {
+                    if (_store == null)
+                    {
+                        DisplayStoreList();
+                    }
+                    else
+                    {
+                        DisplayUserMenu();
+                    }
+                } while (_state != State.closed);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+        }
+
+
+        #endregion
+
+        #region views
+
+        /// <summary>
+        /// customer generic menu
+        /// </summary>
+        public override void DisplayUserMenu()
+        {
+            Console.WriteLine("Welcome to Marvelous Magic (Customer)");
+            Console.WriteLine("==========================");
+            Console.WriteLine("1. Display Products");
+            Console.WriteLine("2. Return to Main Menu");
+            Console.WriteLine(" ");
+            Console.Write("Enter an option:");
+
+            try
+            {
+                var response = Console.ReadLine();
+                int responseParsed;
+                if (CommonFunctions.TryParseInt(response, out responseParsed))
+                {
+                    switch ((CustomerMenu)responseParsed)
+                    {
+                        case CustomerMenu.displayproducts:
+                            DisplayProducts();
+                            break;
+                        case CustomerMenu.back:
+                            _state = State.closed;
+                            break;
+                        default:
+                            WidgetError.DisplayError("Invalid Input");
+                            break;
+                    }
+                }
+                else
+                {
+                    WidgetError.DisplayError("Invalid Input");
+                }
+            }
+            catch (Exception e)
+            {
+                WidgetError.DisplayError(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// lists the available stores
+        /// </summary>
+        public void DisplayStoreList()
+        {
+            try
+            {
+                //get the business object that is being interacted with
+                _store = Transaction.Store.DisplayStoreList();
+            }
+            catch (Exception e)
+            {
+                WidgetError.DisplayError(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// list store products
+        /// </summary>
+        public void DisplayProducts()
+        {
             var headers = new List<string>();
             var content = new List<string>();
             var responses = new List<int>();
@@ -59,104 +167,7 @@ namespace Controller
 
             var obj = new WidgetPaging(headers, content, footer, responses);
         }
-        #endregion
 
-        #region inherited
-        public override void DisplayUserMenu()
-        {
-            Console.WriteLine("Welcome to Marvelous Magic (Customer)");
-            Console.WriteLine("==========================");
-            Console.WriteLine("1. Display Products");
-            Console.WriteLine("2. Return to Main Menu");
-            Console.WriteLine(" ");
-            Console.Write("Enter an option:");
-
-            try
-            {
-                var response = Console.ReadLine();
-                switch (response)
-                {
-                    case "1":
-                        DisplayProducts();
-                        break;
-                    case "2":
-                        _state = State.closed;
-                        break;
-                    default:
-                        Console.WriteLine("Invalid Input");
-                        break;
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-        }
-
-        /// <summary>
-        /// initiate the class
-        /// </summary>
-        public override void Action()
-        {
-            try
-            {
-                do
-                {
-                    if (_store == null)
-                    {
-                        DisplayStoreList();
-                    }
-                    else
-                    {
-                        DisplayUserMenu();
-                    }
-                } while (_state != State.closed);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
-        }
-
-        /// <summary>
-        /// lists the available stores
-        /// </summary>
-        public void DisplayStoreList()
-        {
-            try
-            {
-                Console.WriteLine("Stores");
-                Console.WriteLine(" ");
-
-                if (_stores == null)
-                {
-                    _stores = new StoreRepository().ListStores();
-                }
-
-                foreach (var obj in _stores)
-                {
-                    string row = obj.StoreID.ToString().PadRight((int)Padding.id) +
-                        obj.Name.PadRight((int)Padding.name);
-                    Console.WriteLine(row);
-                }
-
-                Console.WriteLine(" ");
-                Console.Write("Enter an option: ");
-
-                var input = Console.ReadLine();
-                int inputParsed = Convert.ToInt32(input);
-
-                if (inputParsed < _stores.Count)
-                {
-                    _store = new BusinessObject.Store(inputParsed);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
         #endregion
     }
 }

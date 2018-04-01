@@ -1,4 +1,5 @@
-﻿using Common.Enum;
+﻿using Common;
+using Common.Enum;
 using Repository;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,6 @@ namespace BusinessObject
 
         private StoreRepository _repository;
         private List<DataObject.StoreInventory> _inventory;
-        private List<DataObject.StoreInventory> _notInventory;
         #endregion
 
         #region ctor
@@ -31,6 +31,7 @@ namespace BusinessObject
         #endregion
 
         #region methods
+
         /// <summary>
         /// Used to populate the store's inventory
         /// </summary>
@@ -54,29 +55,20 @@ namespace BusinessObject
         }
 
         /// <summary>
-        /// lists inventory
+        /// lists not in inventory
         /// </summary>
         public List<DataObject.Product> DisplayNotInInventory()
         {
-            //display
-            Console.WriteLine("Add to Inventory");
-            Console.WriteLine(" ");
-
-            var NotInInventory = new ProductRepository().GetNotInInventory(_poco.StoreID);
-
-            string headerRow = "Id" +
-                "" +
-                "" +
-                "" +
-                "" +
-                "";
-            Console.WriteLine(headerRow);
-            foreach (var item in NotInInventory)
+            try
             {
+                var NotInInventory = new ProductRepository().GetNotInInventory(_poco.StoreID);
 
+                return NotInInventory;
             }
-
-            return NotInInventory;
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -85,7 +77,7 @@ namespace BusinessObject
         /// <param name="ProductID"></param>
         /// <param name="StoreID"></param>
         /// <param name="Quantity"></param>
-        public void AddToInventory(int ProductID, int Quantity = 1) {
+        public void AddToInventory(int ProductID, int Quantity = Constants.NEWSTOCKITEMDEFAULT) {
             //insert product into inventory
             try
             {
@@ -117,17 +109,36 @@ namespace BusinessObject
         /// </summary>
         /// <param name="Threshold"></param>
         /// <param name="ProductID"></param>
-        public void OrderStock(int Threshold, int ProductID) {
+        public void RequestStock(int Threshold, int ProductID) {
             try
             {
                 var repo = new StoreInventoryRepository();
                     repo.CreateStoreInventory(StoreID: _poco.StoreID, ProductID: ProductID);
+
+                //reset the store inventory
+                _inventory = GetInventoryProducts(true);
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+        /// <summary>
+        /// purchase the itme for the customer
+        /// </summary>
+        /// <param name="ProductID"></param>
+        /// <param name="Quantity"></param>
+        public void PurchaseStock(int ProductID, int Quantity) {
+            try {
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         #endregion
     }
 }
