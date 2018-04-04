@@ -20,7 +20,7 @@ namespace Repository
         /// <param name="StoreID"></param>
         /// <param name="inInventory"></param>
         /// <returns></returns>
-        public List<DataObject.StoreInventory> GetStoreInventoryByStoreId(int StoreID, bool inInventory) {
+        public List<DataObject.StoreInventory> GetStoreInventoryByStoreId(int StoreID, bool inInventory = true) {
             try
             {
                 string query = " SELECT si.*, p.Name AS ProductName, s.Name AS StoreName FROM StoreInventory si " +

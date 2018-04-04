@@ -13,6 +13,28 @@ namespace Repository
         public StockRequestRepository() { }
         #endregion
 
+        #region create
+        /// <summary>
+        /// insert into stock request
+        /// </summary>
+        /// <param name="StoreID"></param>
+        /// <param name="ProductID"></param>
+        /// <param name="Quantity"></param>
+        public void CreateStockRequest(int StoreID, int ProductID, int Quantity) {
+            try {
+                string query = " INSERT INTO StockRequest " +
+                    " (StoreID, ProductID, Quantity) " +
+                    " VALUES " +
+                    $" ({StoreID}, {ProductID}, {Quantity}) ";
+
+                DBConn.Insert(query);
+            }
+            catch (Exception) {
+                throw;
+            }
+        }
+        #endregion
+
         #region get
         /// <summary>
         /// lists all stockrequests

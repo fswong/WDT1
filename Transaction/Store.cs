@@ -57,7 +57,8 @@ namespace Transaction
         public void RequestStock(BusinessObject.Store store, int ProductID, int Quantity) {
             try
             {
-                //store.RequestStock();
+                // TODO pass this to the BO
+                new StockRequestRepository().CreateStockRequest(store._poco.StoreID, ProductID, Quantity);
             }
             catch (Exception)
             {
@@ -75,6 +76,23 @@ namespace Transaction
         public BusinessObject.Store PurchaseItem(BusinessObject.Store store, int ProductID, int Quantity) {
             try
             {
+                // TODO pass this to the BO
+                //get the item from the store
+                var siRepo = new StoreInventoryRepository();
+                var item = siRepo.GetStoreInventoryByStoreIdAndProductId(StoreID: store._poco.StoreID, ProductID: ProductID);
+
+                // validate that there is enough stock
+                if (item.StockLevel >= Quantity)
+                {
+                    int newStock = item.StockLevel - Quantity;
+                    siRepo.UpdateStoreInventory(StoreID: store._poco.StoreID, ProductID: ProductID, Quantity: newStock);
+
+                    // refresh the store's inventory
+                    // this is the stores internal private method, so this logic has to move into the store
+                }
+                else {
+                    throw new Exception("Insuffienct stock to process thsi request");
+                }
                 return store;
             }
             catch (Exception)

@@ -44,9 +44,10 @@ namespace Common.Widgets
             }
             catch (Exception) {
                 //handle error or throw?
+                throw;
             }
             finally {
-                ReturnSelection();
+                //ReturnSelection();
             }
         }
 
@@ -100,7 +101,7 @@ namespace Common.Widgets
                 var input = Console.ReadLine();
                 int parsedInput;
 
-                if (Int32.TryParse(input, out parsedInput))
+                if (StaticMethods.CommonFunctions.TryParseInt(input, out parsedInput))
                 {
                     if (_responses != null) {
                         // interger input, check if valid
@@ -110,7 +111,7 @@ namespace Common.Widgets
                             _state = State.closed;
                         }
                         else {
-                            Console.WriteLine("Invalid Input");
+                            WidgetError.DisplayError("Not a valid product");
                         }
                     }
                 }
@@ -123,13 +124,12 @@ namespace Common.Widgets
                     // string input
                     _offset += 3;
                     if (_offset >= _content.Count) {
-                        //Console.WriteLine("Reached the end of the selection");
-                        //_state = State.closed;
                         _offset = 0;
                     }
                 }
                 else {
-                    Console.WriteLine("Invalid Input");
+                    // unrecognised character
+                    WidgetError.DisplayError("Invalid Input");
                 }
             } catch (Exception) {
                 throw;
@@ -140,7 +140,7 @@ namespace Common.Widgets
         /// nullable return
         /// </summary>
         /// <returns></returns>
-        private int? ReturnSelection() {
+        public int? ReturnSelection() {
             return _selection;
         }
     }

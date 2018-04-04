@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -12,7 +13,13 @@ namespace Repository
     static class DBConn
     {
         #region properties
-        private const string _connString = "";
+        // DO NOT commit this with the querystring
+        //private static string _connString = System.Configuration.ConfigurationManager.ConnectionStrings["main"].ConnectionString;
+        //private static IConfigurationRoot Configuration { get; } = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        //private static string _connString = Configuration["ConnectionString"];
+
+        
+        private const string _connString = "Server=wdt2018.australiaeast.cloudapp.azure.com;Database=s3593297;Uid=s3593297;Pwd=abc123;";
         #endregion
 
         #region methods
@@ -137,6 +144,9 @@ namespace Repository
         /// <returns></returns>
         private static SqlConnection OpenConnection()
         {
+            //IConfigurationRoot Configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            //string _connString = Configuration["ConnectionString"];
+
             SqlConnection conn = new SqlConnection(_connString);
             conn.Open();
             return conn;

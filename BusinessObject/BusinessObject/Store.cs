@@ -57,13 +57,11 @@ namespace BusinessObject
         /// <summary>
         /// lists not in inventory
         /// </summary>
-        public List<DataObject.Product> DisplayNotInInventory()
+        public List<DataObject.Product> ListNotInInventory()
         {
             try
             {
-                var NotInInventory = new ProductRepository().GetNotInInventory(_poco.StoreID);
-
-                return NotInInventory;
+                return new ProductRepository().GetNotInInventory(_poco.StoreID);
             }
             catch (Exception)
             {

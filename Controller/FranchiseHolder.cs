@@ -5,6 +5,8 @@ using Repository;
 using Common.Interface;
 using Common.Enum;
 using System.Linq;
+using Common.Widgets;
+using Common.StaticMethods;
 
 namespace Controller
 {
@@ -21,14 +23,14 @@ namespace Controller
         }
         #endregion
 
-        #region methods
+        #region handlers
+
         /// <summary>
         /// Returns list of items
         /// </summary>
-        public void DisplayInventory(bool inInventory = true) {
+        public void DisplayInventory() {
             try {
-                //_store.DisplayInventory();
-
+                var items = _store.ListStoreInventory();
 
             } catch (Exception) {
                 throw;
@@ -38,7 +40,7 @@ namespace Controller
         /// <summary>
         /// display stock requests for the current store
         /// </summary>
-        public void DisplayStockRequest()
+        public void StockRequestHandler()
         {
             try
             {
@@ -59,29 +61,65 @@ namespace Controller
             try
             {
                 // list stuff thats not in
-                var notInInventory = _store.DisplayNotInInventory();
+                var notInInventory = _store.ListNotInInventory();
 
                 // add to list
                 var input = Console.ReadLine();
-                int inputParsed = Convert.ToInt32(input);
-
-                if (notInInventory.Any(item => item.ProductID == inputParsed))
+                int inputParsed;
+                if (CommonFunctions.TryParseInt(input, out inputParsed))
                 {
-                    _store.AddToInventory(ProductID: inputParsed);
+                    if (notInInventory.Any(item => item.ProductID == inputParsed))
+                    {
+                        _store.AddToInventory(ProductID: inputParsed);
+                    }
+                    else
+                    {
+                        WidgetError.DisplayError("Invalid Input");
+                    }
                 }
                 else {
-                    Console.WriteLine("Invalid Input");
+                    WidgetError.DisplayError("Invalid Input");
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                throw;
+                WidgetError.DisplayError(e.Message);
             }
         }
         #endregion
 
         #region inherited
+        
+        /// <summary>
+        /// initiate the class
+        /// </summary>
+        public override void Action()
+        {
+            try
+            {
+                do
+                {
+                    if (_store == null)
+                    {
+                        DisplayStoreList();
+                    }
+                    else
+                    {
+                        DisplayUserMenu();
+                    }
+                } while (_state != State.closed);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+        }
+
+        #endregion
+
+        #region view
+
         /// <summary>
         /// the root franchise holder view
         /// </summary>
@@ -106,7 +144,7 @@ namespace Controller
                         DisplayInventory();
                         break;
                     case "2":
-                        DisplayStockRequest();
+                        StockRequestHandler();
                         break;
                     case "3":
                         AddNewInventoryItem();
@@ -133,63 +171,57 @@ namespace Controller
         {
             try
             {
-                Console.WriteLine("Stores");
-                Console.WriteLine(" ");
-
-                if (_stores == null)
-                {
-                    _stores = new StoreRepository().ListStores();
-                }
-
-                foreach (var obj in _stores)
-                {
-                    string row = obj.StoreID.ToString().PadRight((int)Padding.id) +
-                        obj.Name.PadRight((int)Padding.name);
-                    Console.WriteLine(row);
-                }
-
-                Console.WriteLine(" ");
-                Console.Write("Enter an option: ");
-
-                var input = Console.ReadLine();
-                int inputParsed = Convert.ToInt32(input);
-
-                if (inputParsed < _stores.Count)
-                {
-                    _store = new BusinessObject.Store(inputParsed);
-                }
+                //get the business object that is being interacted with
+                _store = Transaction.Store.DisplayStoreList();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                WidgetError.DisplayError(e.Message);
             }
         }
 
-        /// <summary>
-        /// initiate the class
-        /// </summary>
-        public override void Action()
-        {
+        public void DisplayStoreInvontory(List<DataObject.StoreInventory> items) {
             try
             {
-                do
+                var headers = new List<string>();
+                var content = new List<string>();
+                var footer = " ";
+
+                //generate header
+                string[] header = { "ID", "Product", "Current Stock" };
+                header[0] = header[0].PadRight((int)Padding.id, ' ');
+                header[1] = header[1].PadRight((int)Padding.name, ' ');
+                header[2] = header[2].PadRight((int)Padding.quantity, ' ');
+
+                string headerString = "";
+                foreach (string str in header)
                 {
-                    if (_store == null)
-                    {
-                        DisplayStoreList();
-                    }
-                    else
-                    {
-                        DisplayUserMenu();
-                    }
-                } while (_state != State.closed);
+                    headerString += str;
+                }
+
+                headers.Add(headerString);
+
+                //generate details
+                foreach (var item in items)
+                {
+                    string outputRow =
+                        item.ProductID.ToString().PadRight((int)Padding.id, ' ') +
+                        item.ProductName.PadRight((int)Padding.name, ' ') +
+                        item.StockLevel.ToString().PadRight((int)Padding.quantity, ' ');
+                    content.Add(outputRow);
+                }
+
+                WidgetTable.DisplayTable(headers, content, footer);
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
+            catch (Exception e) {
+                WidgetError.DisplayError(e.Message);
             }
+        }
+
+        public void DisplayNotInInventory() {
 
         }
+
         #endregion
     }
 }
