@@ -43,7 +43,7 @@ namespace Repository
         public List<DataObject.StockRequest> ListStockRequests(int? StoreID = null) {
             try {
                 string query = " SELECT sr.*, s.Name AS StoreName, p.Name AS ProductName, oi.StockLevel AS CurrentStock, " +
-                    " CAST(CASE WHEN sr.Quantity >= StockLevel THEN 1 ELSE 0 END AS BIT) AS StockAvailability " +
+                    " CAST(CASE WHEN oi.StockLevel >= sr.Quantity THEN 1 ELSE 0 END AS BIT) AS StockAvailability " +
                     " FROM StockRequest sr " + 
                     " INNER JOIN Store s ON sr.StoreID = s.StoreID " +
                     " INNER JOIN Product p ON sr.ProductID = p.ProductID " +
@@ -65,7 +65,7 @@ namespace Repository
         public DataObject.StockRequest GetStockRequestById(int StockRequestID) {
             try {
                 string query = " SELECT sr.*, s.Name AS StoreName, p.Name AS ProductName, oi.StockLevel AS CurrentStock, " +
-                    " CAST(CASE WHEN sr.Quantity >= StockLevel THEN 1 ELSE 0 END AS BIT) AS StockAvailability " +
+                    " CAST(CASE WHEN oi.StockLevel >= sr.Quantity THEN 1 ELSE 0 END AS BIT) AS StockAvailability " +
                     " FROM StockRequest sr " +
                     " INNER JOIN Store s ON sr.StoreID = s.StoreID " +
                     " INNER JOIN Product p ON sr.ProductID = p.ProductID " +

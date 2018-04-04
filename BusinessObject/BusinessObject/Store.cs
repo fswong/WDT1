@@ -80,6 +80,7 @@ namespace BusinessObject
             try
             {
                 new StoreInventoryRepository().CreateStoreInventory(ProductID: ProductID, StoreID: _poco.StoreID, Quantity: Quantity);
+                _inventory = GetInventoryProducts(true);
             }
             catch (Exception) {
                 throw;
@@ -110,11 +111,7 @@ namespace BusinessObject
         public void RequestStock(int Threshold, int ProductID) {
             try
             {
-                var repo = new StoreInventoryRepository();
-                    repo.CreateStoreInventory(StoreID: _poco.StoreID, ProductID: ProductID);
-
-                //reset the store inventory
-                _inventory = GetInventoryProducts(true);
+                new StockRequestRepository().CreateStockRequest(StoreID: _poco.StoreID, ProductID: ProductID, Quantity: Threshold);
             }
             catch (Exception)
             {

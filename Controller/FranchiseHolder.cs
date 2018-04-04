@@ -31,7 +31,7 @@ namespace Controller
         public void DisplayInventory() {
             try {
                 var items = _store.ListStoreInventory();
-
+                DisplayStoreInvontory(items);
             } catch (Exception) {
                 throw;
             }
@@ -44,7 +44,42 @@ namespace Controller
         {
             try
             {
-                var stockRequest = new StockRequestRepository().ListStockRequests(_store._poco.StoreID);
+                // set a threshold
+                Console.WriteLine(" ");
+                Console.Write("Enter a threshold for restocking: ");
+
+                var input = Console.ReadLine();
+                int inputParsed;
+
+                if (CommonFunctions.TryParseInt(input, out inputParsed))
+                {
+                    // get items with quantity less thanthreshold
+                    var items = _store.DisplayStockThreshold(inputParsed);
+                    DisplayStoreInvontory(items);
+
+                    var input2 = Console.ReadLine();
+                    int inputParsed2;
+
+                    if (CommonFunctions.TryParseInt(input2, out inputParsed2))
+                    {
+                        var product = items.Find(item => item.ProductID == inputParsed2);
+
+                        // if valid request the stock
+                        if (product != null) {
+                            _store.RequestStock(Threshold: inputParsed, ProductID: inputParsed2);
+                        }
+                        else {
+                            WidgetError.DisplayError("Not a valid product");
+                        }
+                    }
+                    else {
+                        WidgetError.DisplayError("Invalid input");
+                    }
+                }
+                else {
+                    WidgetError.DisplayError("Invalid input");
+                }
+
             }
             catch (Exception)
             {
@@ -62,15 +97,23 @@ namespace Controller
             {
                 // list stuff thats not in
                 var notInInventory = _store.ListNotInInventory();
+                DisplayNotInInventory(notInInventory);
 
-                // add to list
-                var input = Console.ReadLine();
-                int inputParsed;
-                if (CommonFunctions.TryParseInt(input, out inputParsed))
+                if (notInInventory.Count() > 0)
                 {
-                    if (notInInventory.Any(item => item.ProductID == inputParsed))
+                    // add to list
+                    var input = Console.ReadLine();
+                    int inputParsed;
+                    if (CommonFunctions.TryParseInt(input, out inputParsed))
                     {
-                        _store.AddToInventory(ProductID: inputParsed);
+                        if (notInInventory.Any(item => item.ProductID == inputParsed))
+                        {
+                            _store.AddToInventory(ProductID: inputParsed);
+                        }
+                        else
+                        {
+                            WidgetError.DisplayError("Invalid Input");
+                        }
                     }
                     else
                     {
@@ -78,7 +121,7 @@ namespace Controller
                     }
                 }
                 else {
-                    WidgetError.DisplayError("Invalid Input");
+                    // do nothing
                 }
             }
             catch (Exception e)
@@ -129,7 +172,7 @@ namespace Controller
             Console.WriteLine("Welcome to Marvelous Magic (Franchise Holder)");
             Console.WriteLine("==========================");
             Console.WriteLine("1. Display Inventory");
-            Console.WriteLine("2. Display Stock Request");
+            Console.WriteLine("2. Stock Request (Threshold)");
             Console.WriteLine("3. Add New Inventory Item");
             Console.WriteLine("4. Return to Main Menu");
             Console.WriteLine(" ");
@@ -180,6 +223,10 @@ namespace Controller
             }
         }
 
+        /// <summary>
+        /// list the items in store
+        /// </summary>
+        /// <param name="items"></param>
         public void DisplayStoreInvontory(List<DataObject.StoreInventory> items) {
             try
             {
@@ -218,8 +265,50 @@ namespace Controller
             }
         }
 
-        public void DisplayNotInInventory() {
+        /// <summary>
+        /// lists the items that are not in store
+        /// </summary>
+        /// <param name="items"></param>
+        public void DisplayNotInInventory(List<DataObject.Product> items) {
+            try
+            {
+                if (items.Count() > 0) {
+                    var headers = new List<string>();
+                    var content = new List<string>();
+                    var footer = " ";
 
+                    //generate header
+                    string[] header = { "ID", "Product" };
+                    header[0] = header[0].PadRight((int)Padding.id, ' ');
+                    header[1] = header[1].PadRight((int)Padding.name, ' ');
+
+                    string headerString = "";
+                    foreach (string str in header)
+                    {
+                        headerString += str;
+                    }
+
+                    headers.Add(headerString);
+
+                    //generate details
+                    foreach (var item in items)
+                    {
+                        string outputRow =
+                            item.ProductID.ToString().PadRight((int)Padding.id, ' ') +
+                            item.Name.PadRight((int)Padding.name, ' ');
+                        content.Add(outputRow);
+                    }
+
+                    WidgetTable.DisplayTable(headers, content, footer);
+                }
+                else {
+                    WidgetError.DisplayError("No new products available");
+                }
+            }
+            catch (Exception e)
+            {
+                WidgetError.DisplayError(e.Message);
+            }
         }
 
         #endregion

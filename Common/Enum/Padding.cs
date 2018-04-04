@@ -9,7 +9,7 @@ namespace Common.Enum
     {
         id = 3,
         name = 30,
-        quantity = 4,
+        quantity = 15,
         boolean = 5,
     }
 }

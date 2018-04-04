@@ -27,7 +27,9 @@ namespace DataObject.Extension
                             ProductID = Convert.ToInt32(row["ProductID"]),
                             Quantity = Convert.ToInt32(row["Quantity"]),
                             ProductName = row["ProductName"].ToString(),
-                            StoreName = row["StoreName"].ToString()
+                            StoreName = row["StoreName"].ToString(),
+                            CurrentStock = Convert.ToInt32(row["CurrentStock"]),
+                            StockAvailability = Convert.ToBoolean(row["StockAvailability"])
                         }
                         );
                 }
@@ -54,8 +56,11 @@ namespace DataObject.Extension
                     StoreID = Convert.ToInt32(theArray[1]),
                     ProductID = Convert.ToInt32(theArray[2]),
                     Quantity = Convert.ToInt32(theArray[3]),
-                    ProductName = theArray[4].ToString(),
-                    StoreName = theArray[5].ToString()
+                    StoreName = theArray[4].ToString(),
+                    ProductName = theArray[5].ToString(),
+                    
+                    CurrentStock = Convert.ToInt32(theArray[6]),
+                    StockAvailability = Convert.ToBoolean(theArray[7])
                 };
             }
             catch (Exception)

@@ -123,7 +123,7 @@ namespace Transaction
                     }
                     else
                     {
-                        WidgetError.DisplayError("Insufficient stock to process thsi request");
+                        WidgetError.DisplayError("Insufficient stock to process this request");
                     }
                 }
                 else
