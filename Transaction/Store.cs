@@ -91,7 +91,7 @@ namespace Transaction
                     // this is the stores internal private method, so this logic has to move into the store
                 }
                 else {
-                    throw new Exception("Insuffienct stock to process thsi request");
+                    throw new Exception("Insufficient stock to process this request");
                 }
                 return store;
             }
@@ -151,12 +151,14 @@ namespace Transaction
                 int inputParsed;
                 CommonFunctions.TryParseInt(input, out inputParsed);
 
-                if (inputParsed < stores.Count)
+                var store = stores.Find(item => item.StoreID == inputParsed);
+
+                if (store != null)
                 {
                     return new BusinessObject.Store(inputParsed);
                 }
                 else {
-                    throw new Exception("Invalid Store Choesen");
+                    throw new Exception("Invalid Store Chosen");
                 }
             }
             catch (Exception)

@@ -57,24 +57,34 @@ namespace Controller
                     var items = _store.DisplayStockThreshold(inputParsed);
                     DisplayStoreInvontory(items);
 
-                    var input2 = Console.ReadLine();
-                    int inputParsed2;
-
-                    if (CommonFunctions.TryParseInt(input2, out inputParsed2))
+                    if (items.Count() > 0)
                     {
-                        var product = items.Find(item => item.ProductID == inputParsed2);
+                        var input2 = Console.ReadLine();
+                        int inputParsed2;
 
-                        // if valid request the stock
-                        if (product != null) {
-                            _store.RequestStock(Threshold: inputParsed, ProductID: inputParsed2);
+                        if (CommonFunctions.TryParseInt(input2, out inputParsed2))
+                        {
+                            var product = items.Find(item => item.ProductID == inputParsed2);
+
+                            // if valid request the stock
+                            if (product != null)
+                            {
+                                _store.RequestStock(Threshold: inputParsed, ProductID: inputParsed2);
+                            }
+                            else
+                            {
+                                WidgetError.DisplayError("Not a valid product");
+                            }
                         }
-                        else {
-                            WidgetError.DisplayError("Not a valid product");
+                        else
+                        {
+                            WidgetError.DisplayError("Invalid input");
                         }
                     }
                     else {
-                        WidgetError.DisplayError("Invalid input");
+                        //do nothing
                     }
+                    
                 }
                 else {
                     WidgetError.DisplayError("Invalid input");
@@ -248,15 +258,22 @@ namespace Controller
 
                 headers.Add(headerString);
 
-                //generate details
-                foreach (var item in items)
+                if (items.Count() > 0)
                 {
-                    string outputRow =
-                        item.ProductID.ToString().PadRight((int)Padding.id, ' ') +
-                        item.ProductName.PadRight((int)Padding.name, ' ') +
-                        item.StockLevel.ToString().PadRight((int)Padding.quantity, ' ');
-                    content.Add(outputRow);
+                    //generate details
+                    foreach (var item in items)
+                    {
+                        string outputRow =
+                            item.ProductID.ToString().PadRight((int)Padding.id, ' ') +
+                            item.ProductName.PadRight((int)Padding.name, ' ') +
+                            item.StockLevel.ToString().PadRight((int)Padding.quantity, ' ');
+                        content.Add(outputRow);
+                    }
                 }
+                else {
+                    content.Add("No items to display");
+                }
+                
 
                 WidgetTable.DisplayTable(headers, content, footer);
             }

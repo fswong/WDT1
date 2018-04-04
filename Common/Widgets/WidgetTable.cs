@@ -35,7 +35,16 @@ namespace Common.Widgets
                 Console.WriteLine(row);
             }
 
-            Console.Write(footer);
+            Console.WriteLine("");
+
+            //if (String.IsNullOrEmpty(footer.Trim()))
+            //{
+            //    Console.WriteLine(footer);
+            //}
+            //else {
+                Console.Write(footer);
+            //}
+            
         }
     }
 }
